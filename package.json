@@ -1,6 +1,6 @@
 {
   "name": "tart",
-  "description": "Quick DB switching and share tool",
+  "description": "A tool to load, save and publish db snapshots",
   "version": "0.0.0",
   "author": "Houssam",
   "bin": {
@@ -10,7 +10,9 @@
   "dependencies": {
     "@oclif/command": "^1",
     "@oclif/config": "^1",
+    "@oclif/plugin-autocomplete": "^0.3.0",
     "@oclif/plugin-help": "^3",
+    "@oclif/plugin-not-found": "^1.2.4",
     "tslib": "^1"
   },
   "devDependencies": {
@@ -30,13 +32,14 @@
     "typescript": "^3.3"
   },
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=10.0.0"
   },
   "files": [
     "/bin",
     "/lib",
     "/npm-shrinkwrap.json",
-    "/oclif.manifest.json"
+    "/oclif.manifest.json",
+    "yarn.lock"
   ],
   "homepage": "https://github.com/sdelements/tart",
   "keywords": [
@@ -48,7 +51,9 @@
     "commands": "./lib/commands",
     "bin": "tart",
     "plugins": [
-      "@oclif/plugin-help"
+      "@oclif/plugin-help",
+      "@oclif/plugin-not-found",
+      "@oclif/plugin-autocomplete"
     ]
   },
   "repository": "sdelements/tart",
