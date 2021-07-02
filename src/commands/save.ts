@@ -1,5 +1,6 @@
 import {Command} from '@oclif/command'
 import * as execa from 'execa'
+import constants from '../constants'
 
 export default class Save extends Command {
   static description = 'describe the command here'
@@ -22,7 +23,7 @@ export default class Save extends Command {
     this.log(`output file name: ${output}`)
 
     const dump = await execa.command(
-      `pg_dump -Fc -Z 9 -U sdlc --file=${output} sdlc`
+      `pg_dump -Fc -Z 9 -U sdlc --file=${constants.REPO_DIR}/${output} sdlc`
     );
 
   }

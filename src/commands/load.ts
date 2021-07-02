@@ -10,9 +10,8 @@ export default class Load extends Command {
 
   static args = [{
       name: 'input', 
-      required: false,
+      required: true,
       description: 'name of input file',
-      default: 'dbdump'
     }]
 
   async run() {
