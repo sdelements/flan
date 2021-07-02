@@ -1,7 +1,6 @@
-tart
-====
+# tart
 
-Quick DB switching and share tool
+A tool to load, save and publish db snapshots
 
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
 [![Version](https://img.shields.io/npm/v/tart.svg)](https://npmjs.org/package/tart)
@@ -9,11 +8,15 @@ Quick DB switching and share tool
 [![License](https://img.shields.io/npm/l/tart.svg)](https://github.com/sdelements/tart/blob/master/package.json)
 
 <!-- toc -->
-* [Usage](#usage)
-* [Commands](#commands)
+
+- [Usage](#usage)
+- [Commands](#commands)
 <!-- tocstop -->
+
 # Usage
+
 <!-- usage -->
+
 ```sh-session
 $ npm install -g tart
 $ tart COMMAND
@@ -25,11 +28,39 @@ USAGE
   $ tart COMMAND
 ...
 ```
+
 <!-- usagestop -->
+
 # Commands
+
 <!-- commands -->
-* [`tart hello [FILE]`](#tart-hello-file)
-* [`tart help [COMMAND]`](#tart-help-command)
+
+- [`tart autocomplete [SHELL]`](#tart-autocomplete-shell)
+- [`tart hello [FILE]`](#tart-hello-file)
+- [`tart help [COMMAND]`](#tart-help-command)
+
+## `tart autocomplete [SHELL]`
+
+display autocomplete installation instructions
+
+```
+USAGE
+  $ tart autocomplete [SHELL]
+
+ARGUMENTS
+  SHELL  shell type
+
+OPTIONS
+  -r, --refresh-cache  Refresh cache (ignores displaying instructions)
+
+EXAMPLES
+  $ tart autocomplete
+  $ tart autocomplete bash
+  $ tart autocomplete zsh
+  $ tart autocomplete --refresh-cache
+```
+
+_See code: [@oclif/plugin-autocomplete](https://github.com/oclif/plugin-autocomplete/blob/v0.3.0/src/commands/autocomplete/index.ts)_
 
 ## `tart hello [FILE]`
 
@@ -67,4 +98,5 @@ OPTIONS
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.2/src/commands/help.ts)_
+
 <!-- commandsstop -->
