@@ -3,41 +3,38 @@
 A tool to load, save and publish db snapshots
 
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
-[![Version](https://img.shields.io/npm/v/tart.svg)](https://npmjs.org/package/tart)
-[![Downloads/week](https://img.shields.io/npm/dw/tart.svg)](https://npmjs.org/package/tart)
+[![Version](https://img.shields.io/npm/v/tart.svg)](https://npmjs.org/package/@sdelements/tart)
+[![Downloads/week](https://img.shields.io/npm/dw/tart.svg)](https://npmjs.org/package/@sdelements/tart)
 [![License](https://img.shields.io/npm/l/tart.svg)](https://github.com/sdelements/tart/blob/master/package.json)
 
 <!-- toc -->
-
-- [Usage](#usage)
-- [Commands](#commands)
+* [tart](#tart)
+* [Usage](#usage)
+* [Commands](#commands)
 <!-- tocstop -->
 
 # Usage
 
 <!-- usage -->
-
 ```sh-session
-$ npm install -g tart
+$ npm install -g @sdelements/tart
 $ tart COMMAND
 running command...
 $ tart (-v|--version|version)
-tart/0.0.0 linux-x64 node-v14.16.0
+@sdelements/tart/0.0.0 linux-x64 node-v14.16.0
 $ tart --help [COMMAND]
 USAGE
   $ tart COMMAND
 ...
 ```
-
 <!-- usagestop -->
 
 # Commands
 
 <!-- commands -->
-
-- [`tart autocomplete [SHELL]`](#tart-autocomplete-shell)
-- [`tart hello [FILE]`](#tart-hello-file)
-- [`tart help [COMMAND]`](#tart-help-command)
+* [`tart autocomplete [SHELL]`](#tart-autocomplete-shell)
+* [`tart hello [FILE]`](#tart-hello-file)
+* [`tart help [COMMAND]`](#tart-help-command)
 
 ## `tart autocomplete [SHELL]`
 
@@ -98,5 +95,4 @@ OPTIONS
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.2/src/commands/help.ts)_
-
 <!-- commandsstop -->

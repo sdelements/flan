@@ -1,5 +1,5 @@
 {
-  "name": "tart",
+  "name": "@sdelements/tart",
   "description": "A tool to load, save and publish db snapshots",
   "version": "0.0.0",
   "author": "Houssam",
