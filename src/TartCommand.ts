@@ -25,13 +25,17 @@ export default abstract class TartCommand extends Command {
       this.constructor as Input<typeof TartCommand.flags>
     );
 
-    const configPath = flags.config || "./tart.config.js";
+    const configPath = flags.config || "./tart.config.json";
 
     try {
       const config = await fs.readJson(configPath as string);
       this.localConfig = config;
     } catch (err) {
       this.error("Unable to load configuration", err);
+    }
+
+    if (!this.localConfig?.database?.db) {
+      this.error("db is required in the database is required");
     }
   }
 }
