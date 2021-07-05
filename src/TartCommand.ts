@@ -43,14 +43,24 @@ export default abstract class TartCommand extends Command {
   }
 
   async loadConfigFile(configPath: string) {
+    let configJSON;
+
     try {
-      const configJSON = await fs.readJson(configPath);
-      this.localConfig = {
-        ...this.localConfig,
-        ...configJSON,
-      };
+      configJSON = await fs.readJson(configPath);
     } catch (err) {
-      this.error("Unable to load configuration", err);
+      this.error("Unable to load configuration");
     }
+
+    if (!configJSON.database.db) {
+      this.error("Database is required");
+    }
+    if (!configJSON.database.host) {
+      this.error("Database host is required");
+    }
+
+    this.localConfig = {
+      ...this.localConfig,
+      ...configJSON,
+    };
   }
 }
