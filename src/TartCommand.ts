@@ -5,7 +5,7 @@ import * as fs from "fs-extra";
 
 export default abstract class TartCommand extends Command {
   localConfig: {
-    database: { host: string; db?: string; user?: string; password?: string };
+    database: { host: string; db: string; user?: string; password?: string };
     saveDir: string;
     repository?: string;
   };
@@ -29,12 +29,13 @@ export default abstract class TartCommand extends Command {
       saveDir: ".tart",
       database: {
         host: "localhost",
+        db: "",
       },
     };
   }
 
   async init() {
-    const { flags, ...rest } = this.parse(
+    const { flags } = this.parse(
       this.constructor as Input<typeof TartCommand.flags>
     );
 
@@ -44,7 +45,6 @@ export default abstract class TartCommand extends Command {
   async loadConfigFile(configPath: string) {
     try {
       const configJSON = await fs.readJson(configPath);
-
       this.localConfig = {
         ...this.localConfig,
         ...configJSON,

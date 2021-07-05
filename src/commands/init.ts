@@ -17,7 +17,7 @@ export default class Init extends TartCommand {
   }
 
   async run() {
-    const { flags, ...rest } = this.parse(
+    const { flags } = this.parse(
       this.constructor as Input<typeof TartCommand.flags>
     );
 
@@ -29,19 +29,45 @@ export default class Init extends TartCommand {
       if (await cli.confirm("A config file will be created, continue?")) {
         const host = await cli.prompt("Please enter your database host");
 
+        const db = await cli.prompt("Please enter your database name");
+
         const password = await cli.prompt(
           "(Optional) Please enter your database password",
           { required: false, type: "hide" }
         );
 
-        const db = await cli.prompt(
-          "(Optional) Please enter your database name",
-          { required: false }
-        );
-
         const user = await cli.prompt(
           "(Optional) Please enter your database username",
           { required: false }
+        );
+
+        let saveDir = this.localConfig.saveDir;
+        const savePathExists = await fs.pathExists(saveDir);
+
+        if (!savePathExists) {
+          const saveDirName = await cli.prompt(
+            "Please enter the name of your save directory",
+            {
+              required: false,
+              default: ".tart",
+            }
+          );
+          if (saveDirName) {
+            await fs.ensureDir(saveDirName);
+            saveDir = saveDirName;
+
+            this.log(
+              `The save directory has been created successfully at ${path.resolve(
+                saveDirName
+              )}`
+            );
+          }
+        }
+
+        this.log(
+          `The configuration file has been created successfully at ${path.resolve(
+            configPath
+          )}`
         );
 
         await fs.outputJson(configPath, {
@@ -51,30 +77,10 @@ export default class Init extends TartCommand {
             db,
             user,
           },
-          saveDir: ".tart",
+          saveDir,
         });
-
-        this.log("The configuration file has been created successfully");
       }
     }
-
     await this.loadConfigFile(configPath);
-
-    const savePathExists = await fs.pathExists(this.localConfig.saveDir);
-
-    if (!savePathExists) {
-      const saveDirName = await cli.prompt(
-        "Please enter the name of your save directory",
-        {
-          required: false,
-          default: this.localConfig.saveDir,
-        }
-      );
-      if (saveDirName) {
-        await fs.ensureDir(saveDirName);
-
-        this.log("The save directory has been created successfully");
-      }
-    }
   }
 }
