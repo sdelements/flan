@@ -1,5 +1,6 @@
 import { Command, flags } from "@oclif/command";
 import { Input, OutputFlags } from "@oclif/parser";
+import * as path from "path";
 import * as fs from "fs-extra";
 
 export default abstract class TartCommand extends Command {
@@ -36,6 +37,16 @@ export default abstract class TartCommand extends Command {
 
     if (!this.localConfig?.database?.db) {
       this.error("db is required in the database is required");
+    }
+  }
+
+  async runHook(name: string) {
+    const hooksFileName = path.resolve(process.cwd(), "./tart.hooks.js");
+    const hooksExists = await fs.pathExists(hooksFileName);
+
+    if (hooksExists) {
+      const hooks = require(hooksFileName);
+      if (typeof hooks[name] === "function") return hooks[name]();
     }
   }
 }

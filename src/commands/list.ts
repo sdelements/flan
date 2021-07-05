@@ -20,11 +20,11 @@ export default class List extends TartCommand {
     const fileList = fs.readdirSync(dir);
 
     for (let file of fileList) {
-      if (file == "tart.config.json" || file == ".git") continue;
+      if (file === "tart.config.json" || file === ".git") continue;
 
       const path = dir + "/" + file;
       const fileDisplayPath =
-        displayPath == "" ? file : displayPath + "/" + file;
+        displayPath === "" ? file : displayPath + "/" + file;
 
       if (fs.statSync(path).isDirectory()) {
         this.listDirectory(path, fileDisplayPath);

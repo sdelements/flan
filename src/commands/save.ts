@@ -5,7 +5,7 @@ import * as path from "path";
 export default class Save extends TartCommand {
   static description = "describe the command here";
 
-  static examples = [`$ tart save`];
+  static examples = ["$ tart save", "$ tart save myDB"];
 
   static flags = {
     ...TartCommand.flags,
@@ -21,6 +21,8 @@ export default class Save extends TartCommand {
   ];
 
   async run() {
+    this.runHook("beforeSave");
+
     const { args } = this.parse(Save);
 
     const output = args.output;
@@ -40,5 +42,7 @@ export default class Save extends TartCommand {
       ...pgArgs,
       this.localConfig?.database.db as string,
     ]);
+
+    this.runHook("afterSave");
   }
 }
