@@ -44,9 +44,16 @@ export default class Save extends TartCommand {
       const resRepoDir = path.resolve(repoDir);
 
       // git checkout master TODO add check to see if master is there and toggle -b
-      await execa("git", ["checkout", "master"], {
-        cwd: resRepoDir,
-      });
+
+      try {
+        await execa("git", ["checkout", "master"], {
+          cwd: resRepoDir,
+        });
+      } catch (e) {
+        await execa("git", ["checkout", "-b", "master"], {
+          cwd: resRepoDir,
+        });
+      }
 
       this.log("orphan checked master");
 
@@ -61,7 +68,7 @@ export default class Save extends TartCommand {
       this.log("reset dir");
 
       // save file
-      this.simpleSave(output, repoDir);
+      await this.simpleSave(output, repoDir);
 
       this.log("saved new file");
 
