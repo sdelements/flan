@@ -25,6 +25,18 @@ export default class Load extends TartCommand {
     const input = args.input;
     console.log(`input file name: ${input}`);
 
+    var dirPath = this.localConfig?.saveDir || ".tart";
+
+    if (input.includes("@")) {
+      dirPath += "/repo";
+      const resRepoDir = path.resolve(dirPath);
+
+      //git checkout db@v2
+      await execa("git", ["checkout", input], {
+        cwd: resRepoDir,
+      });
+    }
+
     const pgArgs = [
       "--jobs=8",
       "--clean",
@@ -36,7 +48,7 @@ export default class Load extends TartCommand {
 
     await execa("pg_restore", [
       ...pgArgs,
-      path.resolve(this.localConfig?.saveDir || ".tart", input) as string,
+      path.resolve(dirPath, input) as string,
     ]);
   }
 }
