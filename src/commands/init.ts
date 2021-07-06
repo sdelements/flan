@@ -50,28 +50,13 @@ A config file will be created, continue? [y/n]
           { required: false }
         );
 
-        let saveDir = this.localConfig.saveDir;
-        const savePathExists = await fs.pathExists(saveDir);
-
-        if (!savePathExists) {
-          const saveDirName = await cli.prompt(
-            "Please enter the name of your save directory",
-            {
-              required: false,
-              default: ".tart",
-            }
-          );
-          if (saveDirName) {
-            await fs.ensureDir(saveDirName);
-            saveDir = saveDirName;
-
-            this.log(
-              `The save directory has been created successfully at ${path.resolve(
-                saveDirName
-              )}`
-            );
+        const saveDir = await cli.prompt(
+          "Please enter the name of your save directory",
+          {
+            required: false,
+            default: ".tart",
           }
-        }
+        );
 
         this.log(
           `The configuration file has been created successfully at ${path.resolve(
@@ -92,6 +77,28 @@ A config file will be created, continue? [y/n]
     } else {
       this.log(`Config file found at ${path.resolve(configPath)}`);
     }
+
     await this.loadConfigFile(configPath);
+
+    const saveDir = this.localConfig.saveDir;
+    const saveDirExists = await fs.pathExists(saveDir);
+    if (!saveDirExists) {
+      if (
+        await cli.confirm(
+          `A save directory will be created at ${path.resolve(
+            saveDir
+          )}, continue? [y/n]`
+        )
+      ) {
+        await fs.ensureDir(saveDir);
+        this.log(
+          `The save directory has been created successfully at ${path.resolve(
+            saveDir
+          )}`
+        );
+      }
+    } else {
+      this.log(`Save directory found at ${path.resolve(saveDir)}`);
+    }
   }
 }

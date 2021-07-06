@@ -58,6 +58,10 @@ export default abstract class TartCommand extends Command {
       this.error("Database host is required");
     }
 
+    if (!configJSON.saveDir) {
+      this.error("Save directory is required");
+    }
+
     this.localConfig = {
       ...this.localConfig,
       ...configJSON,
