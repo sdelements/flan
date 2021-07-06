@@ -35,7 +35,7 @@ A config file will be created, continue? [y/n]
     const configPathExists = await fs.pathExists(configPath);
 
     if (!configPathExists) {
-      if (await cli.confirm("A config file will be created, continue?")) {
+      if (await cli.confirm("A config file will be created, continue? [y/n]")) {
         const host = await cli.prompt("Please enter your database host");
 
         const db = await cli.prompt("Please enter your database name");
@@ -88,9 +88,9 @@ A config file will be created, continue? [y/n]
           },
           saveDir,
         });
-      } else {
-        this.log(`Config file found at ${path.resolve(configPath)}`);
       }
+    } else {
+      this.log(`Config file found at ${path.resolve(configPath)}`);
     }
     await this.loadConfigFile(configPath);
   }
