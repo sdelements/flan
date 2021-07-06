@@ -12,6 +12,15 @@ export default class Init extends TartCommand {
     ...TartCommand.flags,
   };
 
+  static examples = [
+    `$ tart init
+Config file found at home/tart.config.js
+`,
+    `$ tart init
+A config file will be created, continue? [y/n]
+`,
+  ];
+
   async init() {
     // Skip
   }
@@ -79,6 +88,8 @@ export default class Init extends TartCommand {
           },
           saveDir,
         });
+      } else {
+        this.log(`Config file found at ${path.resolve(configPath)}`);
       }
     }
     await this.loadConfigFile(configPath);
