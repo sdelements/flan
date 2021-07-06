@@ -1,8 +1,8 @@
 import TartCommand from "../TartCommand";
-import * as fs from "fs";
+import * as fs from "fs-extra";
 
 export default class List extends TartCommand {
-  static description = "describe the command here";
+  static description = "lists available dumps";
 
   static examples = [`$ tart list`];
 
@@ -11,26 +11,18 @@ export default class List extends TartCommand {
   };
 
   async run() {
-    const saveDir = this.localConfig?.saveDir || ".tart";
-
-    this.listDirectory(saveDir, "");
+    this.listDirectory(this.localConfig.saveDir);
   }
 
-  async listDirectory(dir: string, displayPath: string) {
-    const fileList = fs.readdirSync(dir);
+  async listDirectory(dir: string) {
+    const fileList = await fs.readdir(dir, { withFileTypes: true });
 
-    for (let file of fileList) {
-      if (file === "tart.config.json" || file === ".git") continue;
+    const files = fileList
+      .filter((dirent) => dirent.isFile())
+      .map((dirent) => dirent.name);
 
-      const path = dir + "/" + file;
-      const fileDisplayPath =
-        displayPath === "" ? file : displayPath + "/" + file;
-
-      if (fs.statSync(path).isDirectory()) {
-        this.listDirectory(path, fileDisplayPath);
-      } else {
-        this.log(fileDisplayPath);
-      }
-    }
+    files.forEach((file) => {
+      this.log(file);
+    });
   }
 }

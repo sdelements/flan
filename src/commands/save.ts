@@ -3,9 +3,9 @@ import * as execa from "execa";
 import * as path from "path";
 
 export default class Save extends TartCommand {
-  static description = "describe the command here";
+  static description = "save current database to dump";
 
-  static examples = ["$ tart save", "$ tart save myDB"];
+  static examples = ["$ tart save myDB"];
 
   static flags = {
     ...TartCommand.flags,
@@ -14,35 +14,32 @@ export default class Save extends TartCommand {
   static args = [
     {
       name: "output",
-      required: false,
+      required: true,
       description: "name of output file",
-      default: "dbdump",
     },
   ];
 
   async run() {
-    this.runHook("beforeSave");
+    await this.runHook("beforeSave");
 
     const { args } = this.parse(Save);
 
-    const output = args.output;
-    this.log(`output file name: ${output}`);
+    this.log(`output file name: ${args.output}`);
 
     const pgArgs = [
       "-Fc",
       "-Z",
       "9",
       "--file",
-      path.resolve(this.localConfig?.saveDir || ".tart", output),
+      path.resolve(this.localConfig.saveDir, args.output),
     ];
-    this.localConfig?.database.user &&
-      pgArgs.push("-U", this.localConfig?.database.user);
 
-    await execa("pg_dump", [
-      ...pgArgs,
-      this.localConfig?.database.db as string,
-    ]);
+    if (this.localConfig.database.user) {
+      pgArgs.push("-U", this.localConfig.database.user);
+    }
 
-    this.runHook("afterSave");
+    await execa("pg_dump", [...pgArgs, this.localConfig.database.db as string]);
+
+    await this.runHook("afterSave");
   }
 }

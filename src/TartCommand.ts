@@ -50,7 +50,7 @@ export default abstract class TartCommand extends Command {
       this.error("Unable to load configuration", err);
     }
 
-    if (!this.localConfig?.database?.db) {
+    if (!this.localConfig.database.db) {
       this.error("db is required in the database is required");
     }
   }

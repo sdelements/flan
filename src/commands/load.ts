@@ -3,7 +3,7 @@ import * as execa from "execa";
 import * as path from "path";
 
 export default class Load extends TartCommand {
-  static description = "describe the command here";
+  static description = "load database from dump";
 
   static examples = ["$ tart load myDB"];
 
@@ -20,27 +20,28 @@ export default class Load extends TartCommand {
   ];
 
   async run() {
-    this.runHook("beforeLoad");
+    await this.runHook("beforeLoad");
 
     const { args } = this.parse(Load);
 
-    const input = args.input;
-    console.log(`input file name: ${input}`);
+    this.log(`input file name: ${args.input}`);
 
     const pgArgs = [
       "--jobs=8",
       "--clean",
       "-d",
-      this.localConfig?.database.db as string,
+      this.localConfig.database.db as string,
     ];
-    this.localConfig?.database.user &&
-      pgArgs.push("-U", this.localConfig?.database.user);
+
+    if (this.localConfig.database.user) {
+      pgArgs.push("-U", this.localConfig.database.user);
+    }
 
     await execa("pg_restore", [
       ...pgArgs,
-      path.resolve(this.localConfig?.saveDir || ".tart", input) as string,
+      path.resolve(this.localConfig.saveDir, args.input) as string,
     ]);
 
-    this.runHook("afterLoad");
+    await this.runHook("afterLoad");
   }
 }
