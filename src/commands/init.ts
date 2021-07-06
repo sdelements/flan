@@ -2,6 +2,7 @@ import { Input } from "@oclif/parser";
 import * as fs from "fs-extra";
 import * as path from "path";
 import cli from "cli-ux";
+import * as execa from "execa";
 
 import TartCommand from "../TartCommand";
 
@@ -50,6 +51,11 @@ A config file will be created, continue? [y/n]
           { required: false }
         );
 
+        const repository = await cli.prompt(
+          "(Optional) Please enter your repository name",
+          { required: false }
+        );
+
         const saveDir = await cli.prompt(
           "Please enter the name of your save directory",
           {
@@ -72,6 +78,7 @@ A config file will be created, continue? [y/n]
             user,
           },
           saveDir,
+          repository,
         });
       }
     } else {
@@ -99,6 +106,22 @@ A config file will be created, continue? [y/n]
       }
     } else {
       this.log(`Save directory found at ${path.resolve(saveDir)}`);
+    }
+
+    const repoDir = path.resolve(saveDir, "./repo");
+    const repoDirExists = await fs.pathExists(repoDir);
+    if (!repoDirExists) {
+      if (
+        await cli.confirm(
+          `A git repository will be initialized here, continue? [y/n]`
+        )
+      ) {
+        await fs.ensureDir(repoDir);
+        await execa("git", ["init"], {
+          cwd: repoDir,
+        });
+        this.log(`Git repository initialized at ${repoDir}`);
+      }
     }
   }
 }
