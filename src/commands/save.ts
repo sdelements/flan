@@ -5,9 +5,9 @@ import * as nodegit from "nodegit";
 import * as path from "path";
 
 export default class Save extends TartCommand {
-  static description = "describe the command here";
+  static description = "save current database to dump";
 
-  static examples = [`$ tart save`];
+  static examples = ["$ tart save myDB"];
 
   static flags = {
     ...TartCommand.flags,
@@ -16,19 +16,21 @@ export default class Save extends TartCommand {
   static args = [
     {
       name: "output",
-      required: false,
+      required: true,
       description: "name of output file",
-      default: "dbdump",
     },
   ];
 
   async run() {
+    await this.runHook("beforeSave");
+
     const { args } = this.parse(Save);
 
-    const output = args.output;
+    const { output } = args;
+
     this.log(`output file name: ${output}`);
 
-    const saveDir = this.localConfig?.saveDir || ".tart";
+    const saveDir = this.localConfig.saveDir;
 
     // git checkout master
     // git update-ref -d HEAD
@@ -98,9 +100,12 @@ export default class Save extends TartCommand {
     this.localConfig?.database.user &&
       pgArgs.push("-U", this.localConfig?.database.user);
 
-    await execa("pg_dump", [
-      ...pgArgs,
-      this.localConfig?.database.db as string,
-    ]);
+    if (this.localConfig.database.user) {
+      pgArgs.push("-U", this.localConfig.database.user);
+    }
+
+    await execa("pg_dump", [...pgArgs, this.localConfig.database.db as string]);
+
+    await this.runHook("afterSave");
   }
 }
