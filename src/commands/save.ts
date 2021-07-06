@@ -30,88 +30,70 @@ export default class Save extends TartCommand {
 
     const saveDir = this.localConfig?.saveDir || ".tart";
 
+    // git checkout master
+    // git update-ref -d HEAD
+    // git reset --hard
+    // do save
+    // git add filename
+    // git commit -a -m "saved.. $DATE"
+    // git tag filename
+
     if (output.includes("@")) {
       this.log("doing repo save");
       const repoDir = saveDir + "/repo";
+      const resRepoDir = path.resolve(repoDir);
 
-      // git checkout --orphan file
-      // TODO try git reset
-      await execa("git", ["checkout", "--orphan", output], {
-        cwd: path.resolve(repoDir),
+      // git checkout master TODO add check to see if master is there and toggle -b
+      await execa("git", ["checkout", "master"], {
+        cwd: resRepoDir,
       });
 
-      this.log("orphan checked out");
+      this.log("orphan checked master");
 
-      const repo = await nodegit.Repository.open(repoDir);
+      await execa("git", ["update-ref", "-d", "HEAD"], {
+        cwd: resRepoDir,
+      });
 
-      // const head1 = await repo.getHeadCommit();
-      // this.log(head1.toString());
+      await execa("git", ["reset", "--hard"], {
+        cwd: resRepoDir,
+      });
 
-      // git rm -f file
-      // TODO change to git reset --hard
-      const fileList = fs.readdirSync(repoDir);
-      var oldFile = "";
-      for (let file of fileList) {
-        if (file === "." || file === "..") continue;
-        oldFile = file;
-        break;
-      }
-
-      const index = await repo.refreshIndex();
-      await index.removeByPath(repoDir + "/" + oldFile);
-
-      this.log("removed old file");
+      this.log("reset dir");
 
       // save file
-      const pgArgs = [
-        "-Fc",
-        "-Z",
-        "9",
-        "--file",
-        path.resolve(repoDir, output),
-      ];
-      this.localConfig?.database.user &&
-        pgArgs.push("-U", this.localConfig?.database.user);
-
-      await execa("pg_dump", [
-        ...pgArgs,
-        this.localConfig?.database.db as string,
-      ]);
+      this.simpleSave(output, repoDir);
 
       this.log("saved new file");
 
       // git add file
-      // await index.addByPath(output);
-      // this.log("added new file");
+      await execa("git", ["add", output], {
+        cwd: resRepoDir,
+      });
 
-      // git commit -m "file"
-      const commit = await repo.createCommitOnHead(
-        [output],
-        repo.defaultSignature(),
-        repo.defaultSignature(),
-        output
-      );
+      await execa("git", ["commit", "-a", "-m", "saved... " + output], {
+        cwd: resRepoDir,
+      });
 
       this.log("git commit done");
 
       // git tag -a -m "file" file
-      await repo.createTag(commit, output, output);
+      await execa("git", ["tag", "-a", "-f", "-m", output, output], {
+        cwd: resRepoDir,
+      });
       this.log("git tag done");
+    } else {
+      this.simpleSave(output, this.localConfig?.saveDir || ".tart");
     }
+  }
 
-    // const pgArgs = [
-    //   "-Fc",
-    //   "-Z",
-    //   "9",
-    //   "--file",
-    //   path.resolve(this.localConfig?.saveDir || ".tart", output),
-    // ];
-    // this.localConfig?.database.user &&
-    //   pgArgs.push("-U", this.localConfig?.database.user);
+  async simpleSave(output: string, repoDir: string) {
+    const pgArgs = ["-Fc", "-Z", "9", "--file", path.resolve(repoDir, output)];
+    this.localConfig?.database.user &&
+      pgArgs.push("-U", this.localConfig?.database.user);
 
-    // await execa("pg_dump", [
-    //   ...pgArgs,
-    //   this.localConfig?.database.db as string,
-    // ]);
+    await execa("pg_dump", [
+      ...pgArgs,
+      this.localConfig?.database.db as string,
+    ]);
   }
 }
