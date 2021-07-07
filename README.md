@@ -8,14 +8,16 @@ A tool to load, save and publish db snapshots
 [![License](https://img.shields.io/npm/l/tart.svg)](https://github.com/sdelements/tart/blob/master/package.json)
 
 <!-- toc -->
-* [tart](#tart)
-* [Usage](#usage)
-* [Commands](#commands)
+
+- [tart](#tart)
+- [Usage](#usage)
+- [Commands](#commands)
 <!-- tocstop -->
 
 # Usage
 
 <!-- usage -->
+
 ```sh-session
 $ npm install -g @sdelements/tart
 $ tart COMMAND
@@ -27,14 +29,18 @@ USAGE
   $ tart COMMAND
 ...
 ```
+
 <!-- usagestop -->
 
 # Commands
 
 <!-- commands -->
-* [`tart autocomplete [SHELL]`](#tart-autocomplete-shell)
-* [`tart hello [FILE]`](#tart-hello-file)
-* [`tart help [COMMAND]`](#tart-help-command)
+
+- [`tart autocomplete [SHELL]`](#tart-autocomplete-shell)
+- [`tart help [COMMAND]`](#tart-help-command)
+- [`tart list`](#tart-list)
+- [`tart load INPUT`](#tart-load-input)
+- [`tart save OUTPUT`](#tart-save-output)
 
 ## `tart autocomplete [SHELL]`
 
@@ -59,26 +65,6 @@ EXAMPLES
 
 _See code: [@oclif/plugin-autocomplete](https://github.com/oclif/plugin-autocomplete/blob/v0.3.0/src/commands/autocomplete/index.ts)_
 
-## `tart hello [FILE]`
-
-describe the command here
-
-```
-USAGE
-  $ tart hello [FILE]
-
-OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
-
-EXAMPLE
-  $ tart hello
-  hello world from ./src/hello.ts!
-```
-
-_See code: [src/commands/hello.ts](https://github.com/sdelements/tart/blob/v0.0.0/src/commands/hello.ts)_
-
 ## `tart help [COMMAND]`
 
 display help for tart
@@ -95,4 +81,62 @@ OPTIONS
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.2/src/commands/help.ts)_
+
+## `tart list`
+
+lists available dumps
+
+```
+USAGE
+  $ tart list
+
+OPTIONS
+  -c, --config=config  [default: ./tart.config.json] Path to configuration file
+
+EXAMPLE
+  $ tart list
+```
+
+_See code: [src/commands/list.ts](https://github.com/sdelements/tart/blob/v0.0.0/src/commands/list.ts)_
+
+## `tart load INPUT`
+
+load database from dump
+
+```
+USAGE
+  $ tart load INPUT
+
+ARGUMENTS
+  INPUT  name of input file
+
+OPTIONS
+  -c, --config=config  [default: ./tart.config.json] Path to configuration file
+
+EXAMPLE
+  $ tart load myDB
+```
+
+_See code: [src/commands/load.ts](https://github.com/sdelements/tart/blob/v0.0.0/src/commands/load.ts)_
+
+## `tart save OUTPUT`
+
+save current database to dump
+
+```
+USAGE
+  $ tart save OUTPUT
+
+ARGUMENTS
+  OUTPUT  name of output file
+
+OPTIONS
+  -c, --config=config  [default: ./tart.config.json] Path to configuration file
+
+EXAMPLE
+  $ tart save myDB
+```
+
+_See code: [src/commands/save.ts](https://github.com/sdelements/tart/blob/v0.0.0/src/commands/save.ts)_
+
 <!-- commandsstop -->
