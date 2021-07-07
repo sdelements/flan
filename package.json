@@ -30,6 +30,8 @@
     "eslint-config-oclif-typescript": "^0.1",
     "eslint-config-prettier": "^8.3.0",
     "globby": "^10",
+    "husky": ">=6",
+    "lint-staged": ">=10",
     "mocha": "^5",
     "nyc": "^14",
     "prettier": "2.3.2",
@@ -67,7 +69,12 @@
     "posttest": "eslint . --ext .ts --config .eslintrc",
     "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
     "test": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
-    "version": "oclif-dev readme && git add README.md"
+    "version": "oclif-dev readme && git add README.md",
+    "prepare": "husky install"
   },
-  "types": "lib/index.d.ts"
+  "types": "lib/index.d.ts",
+  "lint-staged": {
+    "*.{js,ts}": "eslint",
+    "*.{js,ts,md}": "prettier --write"
+  }
 }
