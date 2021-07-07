@@ -122,6 +122,16 @@ Config file found at home/tart/some-folder/tart.config.json
           cwd: repoDir,
         });
         this.log(`Git repository initialized at ${repoDir}`);
+        if (this.localConfig.repository) {
+          await execa(
+            "git",
+            ["remote", "add", "origin", this.localConfig.repository],
+            {
+              cwd: repoDir,
+            }
+          );
+          this.log(`Set repository to track ${this.localConfig.repository}`);
+        }
       }
     }
   }
