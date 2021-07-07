@@ -39,7 +39,7 @@ export default abstract class TartCommand extends Command {
       this.constructor as Input<typeof TartCommand.flags>
     );
 
-    const configJSON = await fs.readJson((flags.config as unknown) as string);
+    const configJSON = await fs.readJson(flags.config as unknown as string);
 
     try {
       this.localConfig = {

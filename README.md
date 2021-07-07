@@ -8,14 +8,16 @@ A tool to load, save and publish db snapshots
 [![License](https://img.shields.io/npm/l/tart.svg)](https://github.com/sdelements/tart/blob/master/package.json)
 
 <!-- toc -->
-* [tart](#tart)
-* [Usage](#usage)
-* [Commands](#commands)
+
+- [tart](#tart)
+- [Usage](#usage)
+- [Commands](#commands)
 <!-- tocstop -->
 
 # Usage
 
 <!-- usage -->
+
 ```sh-session
 $ npm install -g @sdelements/tart
 $ tart COMMAND
@@ -27,14 +29,16 @@ USAGE
   $ tart COMMAND
 ...
 ```
+
 <!-- usagestop -->
 
 # Commands
 
 <!-- commands -->
-* [`tart autocomplete [SHELL]`](#tart-autocomplete-shell)
-* [`tart hello [FILE]`](#tart-hello-file)
-* [`tart help [COMMAND]`](#tart-help-command)
+
+- [`tart autocomplete [SHELL]`](#tart-autocomplete-shell)
+- [`tart hello [FILE]`](#tart-hello-file)
+- [`tart help [COMMAND]`](#tart-help-command)
 
 ## `tart autocomplete [SHELL]`
 
@@ -95,4 +99,5 @@ OPTIONS
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.2/src/commands/help.ts)_
+
 <!-- commandsstop -->
