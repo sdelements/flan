@@ -75,6 +75,6 @@
   "types": "lib/index.d.ts",
   "lint-staged": {
     "*.{js,ts}": "eslint",
-    "*.{js,ts,md}": "prettier --write"
+    "*.{js,json,ts,md}": "prettier --write"
   }
 }
