@@ -1,8 +1,7 @@
 import TartCommand from "../TartCommand";
 import * as execa from "execa";
-import * as fs from "fs";
-import * as nodegit from "nodegit";
 import * as path from "path";
+import * as fs from "fs-extra";
 
 export default class Save extends TartCommand {
   static description = "save current database to dump";
@@ -25,7 +24,6 @@ export default class Save extends TartCommand {
     await this.runHook("beforeSave");
 
     const { args } = this.parse(Save);
-
     const { output } = args;
 
     this.log(`output file name: ${output}`);
@@ -42,11 +40,10 @@ export default class Save extends TartCommand {
 
     if (output.includes("@")) {
       this.log("doing repo save");
-      const repoDir = saveDir + "/repo";
+      const repoDir = saveDir + "/remote_repo";
       const resRepoDir = path.resolve(repoDir);
 
       // git checkout master TODO add check to see if master is there and toggle -b
-
       try {
         await execa("git", ["checkout", "master"], {
           cwd: resRepoDir,
@@ -93,6 +90,8 @@ export default class Save extends TartCommand {
     } else {
       this.simpleSave(output, this.localConfig?.saveDir || ".tart");
     }
+
+    await this.runHook("afterSave");
   }
 
   async simpleSave(output: string, repoDir: string) {
@@ -105,7 +104,5 @@ export default class Save extends TartCommand {
     }
 
     await execa("pg_dump", [...pgArgs, this.localConfig.database.db as string]);
-
-    await this.runHook("afterSave");
   }
 }

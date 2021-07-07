@@ -1,7 +1,8 @@
 import TartCommand from "../TartCommand";
+import { parseGitOutput, GIT_FLAGS } from "../utils";
 import * as execa from "execa";
 import * as path from "path";
-import * as os from "os";
+import cli from "cli-ux";
 
 export default class Fetch extends TartCommand {
   static description = "publish specified dump file to a remote repository";
@@ -32,42 +33,40 @@ export default class Fetch extends TartCommand {
 
     this.log(`file: ${file} || repo: ${url}`);
 
-    // check that tag exists locally
-
-    // try git push <repo url> <tag name>
-
     // git fetch --dry-run --verbose ../remote_repo/.git/ tag hobi@ --no-tags
 
     try {
-      const { stdout } = await execa(
+      const { stderr } = await execa(
         "git",
-        ["push", "--porcelain", "--dry-run", url, file],
+        ["fetch", "--verbose", url, "tag", file, "--no-tags"],
         { cwd: resRepoDir }
       );
 
-      const successCode = stdout.split(os.EOL)[1][0];
-      if (successCode === "=") {
-        this.log("File is up to date in remote repo.");
-      } else if (successCode === "*") {
-        this.log("Success, file added to remote repo.");
+      const flag = parseGitOutput(stderr);
+      if (flag === GIT_FLAGS.UP_TO_DATE) {
+        this.log("File is up to date.");
+      } else if (flag === GIT_FLAGS.ADD) {
+        this.log("Success, file added.");
       }
     } catch (err) {
-      // if error tag exists ask if they want to force if yes:
-      // git push -f <repo url> <tag name>
-      const errorCode = err.stdout.split(os.EOL)[1][0];
-      if (errorCode === "!") {
-        this.log("The file already exists in the remote repo, overriding...");
-      }
+      if (err.exitCode === 128) {
+        this.log("The file does not exist in the remote repo.");
+      } else if (
+        parseGitOutput(err.stderr) === GIT_FLAGS.REJECT &&
+        (await cli.confirm(
+          "The file already exists in your local repo, do you want to override? [y/n]"
+        ))
+      ) {
+        const { stderr } = await execa(
+          "git",
+          ["fetch", "-f", "--verbose", url, "tag", file, "--no-tags"],
+          { cwd: resRepoDir }
+        );
 
-      const { stdout } = await execa(
-        "git",
-        ["push", "-f", "--porcelain", "--dry-run", url, file],
-        { cwd: resRepoDir }
-      );
-
-      const successCode = stdout.split(os.EOL)[1][0];
-      if (successCode === "+") {
-        this.log("File overriden in remote repo.");
+        const flag = parseGitOutput(stderr);
+        if (flag === GIT_FLAGS.TAG_FORCE_ADD) {
+          this.log("File overriden.");
+        }
       }
     }
 

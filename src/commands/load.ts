@@ -23,7 +23,6 @@ export default class Load extends TartCommand {
     await this.runHook("beforeLoad");
 
     const { args } = this.parse(Load);
-
     const { input } = args;
 
     this.log(`input file name: ${input}`);
@@ -31,7 +30,7 @@ export default class Load extends TartCommand {
     let dirPath = this.localConfig.saveDir;
 
     if (input.includes("@")) {
-      dirPath += "/repo";
+      dirPath += "/remote_repo";
       const resRepoDir = path.resolve(dirPath);
 
       //git checkout db@v2
