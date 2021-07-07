@@ -1,7 +1,8 @@
-import TartCommand from "../TartCommand";
-import * as execa from "execa";
 import * as path from "path";
-import * as fs from "fs-extra";
+import * as execa from "execa";
+
+import TartCommand from "../TartCommand";
+import { createExecaCommand } from "../utils";
 
 export default class Save extends TartCommand {
   static description = "save current database to dump";
@@ -38,57 +39,44 @@ export default class Save extends TartCommand {
     // git commit -a -m "saved.. $DATE"
     // git tag filename
 
+    const git = createExecaCommand("git", {
+      cwd: this.localConfig.repoDir,
+    });
+
     if (output.includes("@")) {
       this.log("doing repo save");
-      const repoDir = saveDir + "/remote_repo";
-      const resRepoDir = path.resolve(repoDir);
 
       // git checkout master TODO add check to see if master is there and toggle -b
       try {
-        await execa("git", ["checkout", "master"], {
-          cwd: resRepoDir,
-        });
+        await git(["checkout", "master"]);
       } catch (e) {
-        await execa("git", ["checkout", "-b", "master"], {
-          cwd: resRepoDir,
-        });
+        await git(["checkout", "-b", "master"]);
       }
 
       this.log("orphan checked master");
 
-      await execa("git", ["update-ref", "-d", "HEAD"], {
-        cwd: resRepoDir,
-      });
-
-      await execa("git", ["reset", "--hard"], {
-        cwd: resRepoDir,
-      });
+      await git(["update-ref", "-d", "HEAD"]);
+      await git(["reset", "--hard"]);
 
       this.log("reset dir");
 
       // save file
-      await this.simpleSave(output, repoDir);
+      await this.simpleSave(output, this.localConfig.repoDir);
 
       this.log("saved new file");
 
       // git add file
-      await execa("git", ["add", output], {
-        cwd: resRepoDir,
-      });
-
-      await execa("git", ["commit", "-a", "-m", "saved... " + output], {
-        cwd: resRepoDir,
-      });
+      await git(["add", output]);
+      await git(["commit", "-a", "-m", `saved... ${output}`]);
 
       this.log("git commit done");
 
       // git tag -a -m "file" file
-      await execa("git", ["tag", "-a", "-f", "-m", output, output], {
-        cwd: resRepoDir,
-      });
+      await git(["tag", "-a", "-f", "-m", output, output]);
+
       this.log("git tag done");
     } else {
-      this.simpleSave(output, this.localConfig?.saveDir || ".tart");
+      this.simpleSave(output, this.localConfig.saveDir);
     }
 
     await this.runHook("afterSave");

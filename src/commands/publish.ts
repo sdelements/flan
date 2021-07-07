@@ -1,8 +1,8 @@
-import TartCommand from "../TartCommand";
-import { parseGitOutput, GIT_FLAGS } from "../utils";
-import * as execa from "execa";
 import * as path from "path";
 import cli from "cli-ux";
+
+import TartCommand from "../TartCommand";
+import { createExecaCommand, parseGitOutput, GIT_FLAGS } from "../utils";
 
 export default class Publish extends TartCommand {
   static description = "publish specified dump file to a remote repository";
@@ -26,15 +26,16 @@ export default class Publish extends TartCommand {
 
     const { args } = this.parse(Publish);
     const { file } = args;
-    const resRepoDir = path.resolve(this.localConfig.saveDir + "/repo");
-
-    // TODO change this to come from some config file
-    const url = "../remote_repo/.git/";
+    const url = this.localConfig.repository;
 
     this.log(`file: ${file} || repo: ${url}`);
 
+    const git = createExecaCommand("git", {
+      cwd: this.localConfig.repoDir,
+    });
+
     // check that tag exists locally
-    const { stdout } = await execa("git", ["tag"], { cwd: resRepoDir });
+    const { stdout } = await git(["tag"]);
     if (!stdout.includes(file)) {
       this.log(
         `${file} is not a valid file in the repo. Try:\n   tart save ${file}@\n   tart publish ${file}@`
@@ -44,9 +45,7 @@ export default class Publish extends TartCommand {
 
     // try git push <repo url> <tag name>
     try {
-      const { stderr } = await execa("git", ["push", "--verbose", url, file], {
-        cwd: resRepoDir,
-      });
+      const { stderr } = await git(["push", "--verbose", url, file]);
 
       const flag = parseGitOutput(stderr);
       if (flag === GIT_FLAGS.UP_TO_DATE) {
@@ -65,11 +64,7 @@ export default class Publish extends TartCommand {
       ) {
         this.log("Overriding...");
 
-        const { stderr } = await execa(
-          "git",
-          ["push", "-f", "--verbose", url, file],
-          { cwd: resRepoDir }
-        );
+        const { stderr } = await git(["push", "-f", "--verbose", url, file]);
 
         if (parseGitOutput(stderr) === GIT_FLAGS.FORCE_ADD) {
           this.log("File overriden in remote repo.");

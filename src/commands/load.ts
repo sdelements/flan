@@ -1,6 +1,7 @@
-import TartCommand from "../TartCommand";
-import * as execa from "execa";
 import * as path from "path";
+import * as execa from "execa";
+
+import TartCommand from "../TartCommand";
 
 export default class Load extends TartCommand {
   static description = "load database from dump";
@@ -30,12 +31,11 @@ export default class Load extends TartCommand {
     let dirPath = this.localConfig.saveDir;
 
     if (input.includes("@")) {
-      dirPath += "/remote_repo";
-      const resRepoDir = path.resolve(dirPath);
+      dirPath = this.localConfig.repoDir;
 
       //git checkout db@v2
       await execa("git", ["checkout", input], {
-        cwd: resRepoDir,
+        cwd: dirPath,
       });
     }
 

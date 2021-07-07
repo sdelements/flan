@@ -1,3 +1,9 @@
+import * as execa from "execa";
+
+export const createExecaCommand =
+  (command: string, config: {}) => async (params: string[]) =>
+    execa(command, params, config);
+
 export const parseGitOutput = (str?: string) => {
   if (!str) return "";
 

@@ -1,6 +1,5 @@
 import TartCommand from "../TartCommand";
 import * as fs from "fs";
-import * as nodegit from "nodegit";
 
 export default class Available extends TartCommand {
   static description = "describe the command here";
@@ -13,29 +12,29 @@ export default class Available extends TartCommand {
 
   async run() {
     const saveDir = this.localConfig?.saveDir || ".tart";
-    const repo = await nodegit.Repository.open(saveDir); // FIX ME PLS await nodegit.Repository.open(saveDir);
+    // const repo = await nodegit.Repository.open(saveDir); // FIX ME PLS await nodegit.Repository.open(saveDir);
 
-    await this.diff(repo);
+    // await this.diff(repo);
     //await this.logDirectory("./test", "test", repo);
   }
 
-  async diff(repo: nodegit.Repository) {
-    const head = await repo.getHeadCommit();
-    const tree = await head.getTree();
-    const diff = await nodegit.Diff.treeToWorkdir(repo, tree);
-    this.log(diff.numDeltas().toString());
+  // async diff(repo: nodegit.Repository) {
+  //   const head = await repo.getHeadCommit();
+  //   const tree = await head.getTree();
+  //   const diff = await nodegit.Diff.treeToWorkdir(repo, tree);
+  //   this.log(diff.numDeltas().toString());
 
-    for (var i = 0; i < diff.numDeltas(); i++) {
-      const delta = diff.getDelta(i);
-      this.log(
-        delta.status() +
-          " " +
-          delta.newFile().path() +
-          " " +
-          delta.oldFile().path()
-      );
-    }
-  }
+  //   for (var i = 0; i < diff.numDeltas(); i++) {
+  //     const delta = diff.getDelta(i);
+  //     this.log(
+  //       delta.status() +
+  //         " " +
+  //         delta.newFile().path() +
+  //         " " +
+  //         delta.oldFile().path()
+  //     );
+  //   }
+  // }
 
   async walkLocalRepo(dir: string, parent: TreeNode, repo: nodegit.Repository) {
     const fileList = fs.readdirSync(dir);

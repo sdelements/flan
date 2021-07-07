@@ -8,6 +8,7 @@ export default abstract class TartCommand extends Command {
   localConfig: {
     database: { host: string; db: string; user?: string; password?: string };
     saveDir: string;
+    repoDir: string;
     repository?: string;
   };
 
@@ -28,6 +29,7 @@ export default abstract class TartCommand extends Command {
 
     this.localConfig = {
       saveDir: ".tart",
+      repoDir: ".tart/repo",
       database: {
         host: "localhost",
         db: "",
@@ -36,7 +38,8 @@ export default abstract class TartCommand extends Command {
   }
 
   async init() {
-    const { flags } = this.parse(TartCommand);
+    // see: https://github.com/oclif/oclif/issues/225#issuecomment-806318444
+    const { flags } = this.parse(this.ctor);
 
     await this.loadConfigFile(flags.config as unknown as string);
   }
@@ -63,6 +66,11 @@ export default abstract class TartCommand extends Command {
 
     this.localConfig = {
       ...this.localConfig,
+      // set full repo path
+      repoDir: path.resolve(
+        configJSON.saveDir || this.localConfig.saveDir,
+        "./repo"
+      ),
       ...configJSON,
     };
   }
