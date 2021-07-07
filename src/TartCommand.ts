@@ -36,9 +36,7 @@ export default abstract class TartCommand extends Command {
   }
 
   async init() {
-    const { flags } = this.parse(
-      this.constructor as Input<typeof TartCommand.flags>
-    );
+    const { flags } = this.parse(TartCommand);
 
     await this.loadConfigFile(flags.config as unknown as string);
   }

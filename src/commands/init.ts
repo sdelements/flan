@@ -20,6 +20,9 @@ Config file found at home/tart.config.js
     `$ tart init
 A config file will be created, continue? [y/n]
 `,
+    `$ tart init -c /some-folder/tart.config.json
+Config file found at home/tart/some-folder/tart.config.json
+`,
   ];
 
   async init() {
@@ -27,9 +30,7 @@ A config file will be created, continue? [y/n]
   }
 
   async run() {
-    const { flags } = this.parse(
-      this.constructor as Input<typeof TartCommand.flags>
-    );
+    const { flags } = this.parse(Init);
 
     const configPath = flags.config as unknown as string;
 
@@ -113,7 +114,7 @@ A config file will be created, continue? [y/n]
     if (!repoDirExists) {
       if (
         await cli.confirm(
-          `A git repository will be initialized here, continue? [y/n]`
+          `A git repository will be initialized at ${repoDir}, continue? [y/n]`
         )
       ) {
         await fs.ensureDir(repoDir);
