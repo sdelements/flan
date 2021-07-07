@@ -50,7 +50,7 @@ export default class Fetch extends TartCommand {
       }
     } catch (err) {
       if (err.exitCode === 128) {
-        this.log("The file does not exist in the remote repo.");
+        this.error("The file does not exist in the remote repo.");
       } else if (
         parseGitOutput(err.stderr) === GIT_FLAGS.REJECT &&
         (await cli.confirm(
