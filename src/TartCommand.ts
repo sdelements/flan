@@ -6,7 +6,7 @@ import * as fs from "fs-extra";
 
 export default abstract class TartCommand extends Command {
   localConfig: {
-    database: { host: string; db?: string; user?: string; password?: string };
+    database: { host: string; db: string; user?: string; password?: string };
     saveDir: string;
     repository?: string;
   };
@@ -30,29 +30,41 @@ export default abstract class TartCommand extends Command {
       saveDir: ".tart",
       database: {
         host: "localhost",
+        db: "",
       },
     };
   }
 
   async init() {
-    const { flags } = this.parse(
-      this.constructor as Input<typeof TartCommand.flags>
-    );
+    const { flags } = this.parse(TartCommand);
 
-    const configJSON = await fs.readJson(flags.config as unknown as string);
+    await this.loadConfigFile(flags.config as unknown as string);
+  }
+
+  async loadConfigFile(configPath: string) {
+    let configJSON;
 
     try {
-      this.localConfig = {
-        ...this.localConfig,
-        ...configJSON,
-      };
+      configJSON = await fs.readJson(configPath);
     } catch (err) {
-      this.error("Unable to load configuration", err);
+      this.error("Unable to load configuration");
     }
 
-    if (!this.localConfig.database.db) {
-      this.error("db is required in the database is required");
+    if (!configJSON.database.db) {
+      this.error("Database is required");
     }
+    if (!configJSON.database.host) {
+      this.error("Database host is required");
+    }
+
+    if (!configJSON.saveDir) {
+      this.error("Save directory is required");
+    }
+
+    this.localConfig = {
+      ...this.localConfig,
+      ...configJSON,
+    };
   }
 
   async runHook(name: string) {
