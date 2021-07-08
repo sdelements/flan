@@ -1,6 +1,6 @@
 import { Command, flags } from "@oclif/command";
 import { IConfig } from "@oclif/config";
-import { Input, OutputFlags } from "@oclif/parser";
+import { OutputFlags } from "@oclif/parser";
 import * as path from "path";
 import * as fs from "fs-extra";
 
