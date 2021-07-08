@@ -1,5 +1,6 @@
 import * as path from "path";
 import * as execa from "execa";
+import * as os from "os";
 
 import TartCommand from "../TartCommand";
 
@@ -28,33 +29,32 @@ export default class Load extends TartCommand {
 
     this.log(`input file name: ${input}`);
 
-    let dirPath = this.localConfig.saveDir;
+    let loadPath = this.localConfig.saveDir;
 
     if (input.includes("@")) {
-      dirPath = this.localConfig.repoDir;
+      loadPath = this.localConfig.repoDir;
 
       //git checkout db@v2
       await execa("git", ["checkout", input], {
-        cwd: dirPath,
+        cwd: loadPath,
       });
     }
 
     const pgArgs = [
-      "--jobs=8",
       "--clean",
-      "-d",
-      this.localConfig.database.db as string,
+      `--jobs=${os.cpus().length}`,
+      "--schema=public",
+      `--dbname=${this.localConfig.database.db as string}`,
+      path.resolve(loadPath, input)
     ];
 
     if (this.localConfig.database.user) {
       pgArgs.push("-U", this.localConfig.database.user);
     }
 
-    await execa("pg_restore", [
-      ...pgArgs,
-
-      path.resolve(dirPath, input) as string,
-    ]);
+    console.time("pg_restore");
+    await execa("pg_restore", pgArgs);
+    console.timeEnd("pg_restore");
 
     await this.runHook("afterLoad");
   }
