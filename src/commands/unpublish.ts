@@ -1,7 +1,11 @@
 import cli from "cli-ux";
 
 import TartCommand from "../TartCommand";
-import { createExecaCommand, parseGitOutput, GIT_FLAGS } from "../utils";
+import {
+  createExecaCommand,
+  parseFlagFromGitOutput,
+  GIT_FLAGS,
+} from "../utils";
 
 export default class Unpublish extends TartCommand {
   static description = "Unpublish specified dump file to a remote repository";
@@ -57,7 +61,7 @@ export default class Unpublish extends TartCommand {
         file,
       ]);
 
-      const flag = parseGitOutput(stderr);
+      const flag = parseFlagFromGitOutput(stderr);
       if (flag === GIT_FLAGS.REMOVE) {
         this.log("Success, file unpublished from the remote repo.");
       }
