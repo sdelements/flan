@@ -590,7 +590,7 @@ chalk@^3.0.0:
     ansi-styles "^4.1.0"
     supports-color "^7.1.0"
 
-chalk@^4.1.0:
+chalk@^4.1.0, chalk@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/chalk/-/chalk-4.1.1.tgz#c80b3fab28bf6371e6863325eee67e618b77e6ad"
   integrity sha512-diHzdDKxcU+bAsUboHLPEDQiw0qEe0qd7SYUn3HgcFlWgbDcfLGswOHYeGrHKzG9z6UYf01d9VFMfZxPM1xZSg==
@@ -758,6 +758,11 @@ commondir@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/commondir/-/commondir-1.0.1.tgz#ddd800da0c66127393cca5950ea968a3aaf1253b"
   integrity sha1-3dgA2gxmEnOTzKWVDqloo6rxJTs=
+
+compare-lists@^1.0.10:
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/compare-lists/-/compare-lists-1.0.10.tgz#907ebf9e52de5dc4f53f4222a0654b2af90e954f"
+  integrity sha512-VFBH+rsO5+FbyuFbJ6aQsOGICDXZu09w3yxQP+8b/7qDj3W3m5sNmK2DoFHfUwAH01RpJtb6fzEqhWy/Cxwg1g==
 
 concat-map@0.0.1:
   version "0.0.1"
