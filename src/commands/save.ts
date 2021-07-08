@@ -2,7 +2,7 @@ import * as path from "path";
 import * as execa from "execa";
 
 import TartCommand from "../TartCommand";
-import { createExecaCommand } from "../utils";
+import { createExecaCommand, checkDumpName } from "../utils";
 
 export default class Save extends TartCommand {
   static description = "save current database to dump";
@@ -43,7 +43,7 @@ export default class Save extends TartCommand {
       cwd: this.localConfig.repoDir,
     });
 
-    if (output.includes("@")) {
+    if (checkDumpName(output)) {
       this.log("doing repo save");
 
       // git checkout master TODO add check to see if master is there and toggle -b
@@ -84,12 +84,8 @@ export default class Save extends TartCommand {
 
   async simpleSave(output: string, repoDir: string) {
     const pgArgs = ["-Fc", "-Z", "9", "--file", path.resolve(repoDir, output)];
-    this.localConfig?.database.user &&
-      pgArgs.push("-U", this.localConfig?.database.user);
-
-    if (this.localConfig.database.user) {
+    this.localConfig.database.user &&
       pgArgs.push("-U", this.localConfig.database.user);
-    }
 
     await execa("pg_dump", [...pgArgs, this.localConfig.database.db as string]);
   }

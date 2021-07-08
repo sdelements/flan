@@ -1,8 +1,11 @@
-import * as path from "path";
 import cli from "cli-ux";
 
 import TartCommand from "../TartCommand";
-import { createExecaCommand, parseGitOutput, GIT_FLAGS } from "../utils";
+import {
+  createExecaCommand,
+  parseFlagFromGitOutput,
+  GIT_FLAGS,
+} from "../utils";
 
 export default class Publish extends TartCommand {
   static description = "publish specified dump file to a remote repository";
@@ -26,28 +29,28 @@ export default class Publish extends TartCommand {
 
     const { args } = this.parse(Publish);
     const { file } = args;
-    const url = this.localConfig.repository;
+    const repository = this.localConfig.repository;
 
-    this.log(`file: ${file} || repo: ${url}`);
+    this.log(`file: ${file} || repo: ${repository}`);
 
     const git = createExecaCommand("git", {
       cwd: this.localConfig.repoDir,
     });
 
     // check that tag exists locally
-    const { stdout } = await git(["tag"]);
-    if (!stdout.includes(file)) {
-      this.log(
+    try {
+      await git(["rev-parse", `${file}^{tag}`]);
+    } catch (err) {
+      this.error(
         `${file} is not a valid file in the repo. Try:\n   tart save ${file}@\n   tart publish ${file}@`
       );
-      return;
     }
 
     // try git push <repo url> <tag name>
     try {
-      const { stderr } = await git(["push", "--verbose", url, file]);
+      const { stderr } = await git(["push", "--verbose", repository, file]);
 
-      const flag = parseGitOutput(stderr);
+      const flag = parseFlagFromGitOutput(stderr);
       if (flag === GIT_FLAGS.UP_TO_DATE) {
         this.log("File is up to date in remote repo.");
       } else if (flag === GIT_FLAGS.ADD) {
@@ -57,18 +60,26 @@ export default class Publish extends TartCommand {
       // if error, tag exists. ask if they want to force. if yes:
       // git push -f <repo url> <tag name>
       if (
-        parseGitOutput(err.stderr) === GIT_FLAGS.REJECT &&
+        parseFlagFromGitOutput(err.stderr) === GIT_FLAGS.REJECT &&
         (await cli.confirm(
           "The file already exists in the remote repo, do you want to override? [y/n]"
         ))
       ) {
         this.log("Overriding...");
 
-        const { stderr } = await git(["push", "-f", "--verbose", url, file]);
+        const { stderr } = await git([
+          "push",
+          "-f",
+          "--verbose",
+          repository,
+          file,
+        ]);
 
-        if (parseGitOutput(stderr) === GIT_FLAGS.FORCE_ADD) {
+        if (parseFlagFromGitOutput(stderr) === GIT_FLAGS.FORCE_ADD) {
           this.log("File overriden in remote repo.");
         }
+      } else {
+        this.error("Could not publish to remote repo.\n" + err);
       }
     }
 
