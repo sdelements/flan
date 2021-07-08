@@ -63,7 +63,12 @@ export default class Load extends TartCommand {
         )
       ) {
         await git(["tag", "-d", deleteFile]);
-        await git(["checkout", "master"]);
+        // git checkout master TODO add check to see if master is there and toggle -b
+        try {
+          await git(["checkout", "master"]);
+        } catch (e) {
+          await git(["checkout", "-b", "master"]);
+        }
         await git(["update-ref", "-d", "HEAD"]);
         await git(["reset", "--hard"]);
       }
