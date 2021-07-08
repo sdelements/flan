@@ -3,6 +3,7 @@ import * as fs from "fs-extra";
 import cli from "cli-ux";
 
 import TartCommand from "../TartCommand";
+import { createExecaCommand } from "../utils";
 
 export default class Load extends TartCommand {
   static description = "delete a local database dump";
@@ -27,22 +28,45 @@ export default class Load extends TartCommand {
     const { args } = this.parse(Load);
     const { deleteFile } = args;
 
-    const deleteFilePath = path.resolve(this.localConfig.saveDir, deleteFile);
-    if (!(await fs.pathExists(deleteFilePath))) {
-      this.error(`This file does not exist`);
-    }
+    const isLocal = !deleteFile.includes("@");
 
-    if (!(await fs.lstat(deleteFilePath)).isFile()) {
-      this.error(`This is not a valid file`);
-    }
+    if (isLocal) {
+      const deleteFilePath = path.resolve(this.localConfig.saveDir, deleteFile);
+      if (!(await fs.pathExists(deleteFilePath))) {
+        this.error(`This file does not exist`);
+      }
 
-    if (
-      await cli.confirm(
-        `Are you sure you wish to delete the local database dump: ${deleteFile}? [y/n]`
-      )
-    ) {
-      await fs.remove(deleteFilePath);
-      this.log(`Successfully deleted ${deleteFile}`);
+      if (!(await fs.lstat(deleteFilePath)).isFile()) {
+        this.error(`This is not a valid file`);
+      }
+
+      if (
+        await cli.confirm(
+          `Are you sure you wish to delete the local database dump: ${deleteFile}? [y/n]`
+        )
+      ) {
+        await fs.remove(deleteFilePath);
+        this.log(`Successfully deleted ${deleteFile}`);
+      }
+    } else {
+      const git = createExecaCommand("git", {
+        cwd: this.localConfig.repoDir,
+      });
+      const { stdout } = await git(["tag"]);
+      if (!stdout.includes(deleteFile)) {
+        this.error(`This database dump does not exist`);
+      }
+
+      if (
+        await cli.confirm(
+          `Are you sure you wish to delete the local database dump: ${deleteFile}? [y/n]`
+        )
+      ) {
+        await git(["tag", "-d", deleteFile]);
+        await git(["checkout", "master"]);
+        await git(["update-ref", "-d", "HEAD"]);
+        await git(["reset", "--hard"]);
+      }
     }
 
     await this.runHook("afterDelete");
