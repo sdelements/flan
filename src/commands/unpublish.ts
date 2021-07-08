@@ -8,9 +8,10 @@ import {
 } from "../utils";
 
 export default class Unpublish extends TartCommand {
-  static description = "Unpublish specified dump file to a remote repository";
+  static description =
+    "unpublish specified database dump from a remote repository";
 
-  static examples = [`$ tart unpublish filename`];
+  static examples = [`$ tart unpublish myDB@1.0.0`];
 
   static flags = {
     ...TartCommand.flags,

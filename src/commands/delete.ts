@@ -8,7 +8,7 @@ import { createExecaCommand, checkDumpName } from "../utils";
 export default class Load extends TartCommand {
   static description = "delete a local database dump";
 
-  static examples = ["$ tart delete myDB"];
+  static examples = ["$ tart delete myDB", "$ tart delete myDB@1.0.0"];
 
   static flags = {
     ...TartCommand.flags,
