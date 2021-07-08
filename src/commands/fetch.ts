@@ -1,5 +1,3 @@
-import * as execa from "execa";
-import * as path from "path";
 import cli from "cli-ux";
 
 import TartCommand from "../TartCommand";

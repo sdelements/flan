@@ -7,6 +7,7 @@ import * as fs from "fs-extra";
 export default abstract class TartCommand extends Command {
   localConfig: {
     database: { host: string; db: string; user?: string; password?: string };
+    baseDir: string;
     saveDir: string;
     repoDir: string;
     repository?: string;
@@ -28,7 +29,8 @@ export default abstract class TartCommand extends Command {
     super(argv, config);
 
     this.localConfig = {
-      saveDir: ".tart",
+      baseDir: ".tart",
+      saveDir: ".tart/local",
       repoDir: ".tart/repo",
       database: {
         host: "localhost",
@@ -50,29 +52,43 @@ export default abstract class TartCommand extends Command {
     try {
       configJSON = await fs.readJson(configPath);
     } catch (err) {
-      this.error("Unable to load configuration");
-    }
-
-    if (!configJSON.database.db) {
-      this.error("Database is required");
-    }
-    if (!configJSON.database.host) {
-      this.error("Database host is required");
-    }
-
-    if (!configJSON.saveDir) {
-      this.error("Save directory is required");
+      this.error("Unable to load configuration file");
     }
 
     this.localConfig = {
       ...this.localConfig,
-      // set full repo path
+      ...configJSON,
+      baseDir: path.resolve(configJSON.baseDir || this.localConfig.baseDir),
+      // set full paths
       repoDir: path.resolve(
-        configJSON.saveDir || this.localConfig.saveDir,
+        configJSON.baseDir || this.localConfig.baseDir,
         "./repo"
       ),
-      ...configJSON,
+      saveDir: path.resolve(
+        configJSON.baseDir || this.localConfig.baseDir,
+        "./local"
+      ),
     };
+
+    if (configJSON.repoDir) {
+      this.localConfig.repoDir = path.resolve(configJSON.repoDir);
+    }
+
+    if (configJSON.saveDir) {
+      this.localConfig.saveDir = path.resolve(configJSON.saveDir);
+    }
+
+    if (!this.localConfig.database.db) {
+      this.error("Database is required");
+    }
+  
+    if (!this.localConfig.database.host) {
+      this.error("Database host is required");
+    }
+
+    if (!this.localConfig.baseDir) {
+      this.error("Base directory is required");
+    }
   }
 
   async runHook(name: string) {
