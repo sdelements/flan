@@ -53,7 +53,6 @@ export default class Fetch extends TartCommand {
         "tag",
         file,
         "--no-tags",
-        "--dry-run",
       ]);
 
       const flag = parseFlagFromGitOutput(stderr);
