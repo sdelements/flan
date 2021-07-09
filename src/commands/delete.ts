@@ -3,7 +3,7 @@ import * as fs from "fs-extra";
 import cli from "cli-ux";
 
 import TartCommand from "../TartCommand";
-import { createExecaCommand, checkDumpName } from "../utils";
+import { createExecaCommand, checkDumpNameForTag } from "../utils";
 
 export default class Load extends TartCommand {
   static description = "delete a local database dump";
@@ -28,7 +28,7 @@ export default class Load extends TartCommand {
     const { args } = this.parse(Load);
     const { deleteFile } = args;
 
-    if (checkDumpName(deleteFile)) {
+    if (checkDumpNameForTag(deleteFile)) {
       await this.deleteGitTag(deleteFile);
     } else {
       await this.deleteLocalFile(deleteFile);
