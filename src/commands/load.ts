@@ -35,6 +35,14 @@ export default class Load extends TartCommand {
     if (checkDumpNameForTag(input)) {
       loadPath = this.localConfig.repoDir;
 
+      try {
+        await execa("git", ["rev-parse", `${input}^{tag}`], {
+          cwd: loadPath,
+        });
+      } catch (err) {
+        this.error(`${input} does not exist in the local repository`);
+      }
+
       //git checkout db@v2
       await execa("git", ["checkout", input], {
         cwd: loadPath,
