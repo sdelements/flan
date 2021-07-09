@@ -71,7 +71,7 @@ export default class Available extends TartCommand {
 
     //console.info(results);
 
-    // print out the restuls in a nice table
+    // print out the results in a nice table
     cli.table(
       results,
       {
