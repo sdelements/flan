@@ -1,5 +1,6 @@
-import TartCommand from "../TartCommand";
 import * as fs from "fs-extra";
+import * as path from "path";
+import TartCommand from "../TartCommand";
 
 export default class List extends TartCommand {
   static description = "lists available dumps";
@@ -11,18 +12,22 @@ export default class List extends TartCommand {
   };
 
   async run() {
-    this.listDirectory(this.localConfig.saveDir);
-  }
-
-  async listDirectory(dir: string) {
-    const fileList = await fs.readdir(dir, { withFileTypes: true });
+    const fileList = await fs.readdir(this.localConfig.saveDir, {
+      withFileTypes: true,
+    });
 
     const files = fileList
-      .filter((dirent) => dirent.isFile())
+      .filter((dirent) => dirent.isDirectory())
       .map((dirent) => dirent.name);
 
     files.forEach((file) => {
-      this.log(file);
+      if (
+        fs.pathExistsSync(
+          path.resolve(this.localConfig.saveDir, file, "./toc.dat")
+        )
+      ) {
+        this.log(file);
+      }
     });
   }
 }

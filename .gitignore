@@ -7,4 +7,5 @@
 /tmp
 node_modules
 *.config.*
+*.hooks.*
 .tart

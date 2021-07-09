@@ -1,6 +1,10 @@
-import TartCommand from "../TartCommand";
-import * as execa from "execa";
 import * as path from "path";
+import * as execa from "execa";
+import * as fs from "fs-extra";
+import * as os from "os";
+
+import TartCommand from "../TartCommand";
+import { createExecaCommand, checkDumpNameForTag } from "../utils";
 
 export default class Save extends TartCommand {
   static description = "save current database to dump";
@@ -23,23 +27,84 @@ export default class Save extends TartCommand {
     await this.runHook("beforeSave");
 
     const { args } = this.parse(Save);
+    const { output } = args;
 
-    this.log(`output file name: ${args.output}`);
+    this.log(`output file name: ${output}`);
+
+    if (checkDumpNameForTag(output)) {
+      await this.dumpWithRepo({ output });
+    } else {
+      await this.dump(path.resolve(this.localConfig.saveDir, output));
+    }
+
+    await this.runHook("afterSave");
+  }
+
+  async dumpWithRepo({ output }: { output: string }) {
+    // git checkout master
+    // git update-ref -d HEAD
+    // git reset --hard
+    // do save
+    // git add filename
+    // git commit -a -m "saved.. $DATE"
+    // git tag filename
+    this.log("doing repo save");
+
+    const git = createExecaCommand("git", {
+      cwd: this.localConfig.repoDir,
+    });
+
+    // git checkout master TODO add check to see if master is there and toggle -b
+    try {
+      await git(["checkout", "master"]);
+    } catch (e) {
+      await git(["checkout", "-b", "master"]);
+    }
+
+    this.log("checked out master");
+
+    await git(["update-ref", "-d", "HEAD"]);
+    await git(["reset", "--hard"]);
+
+    this.log("cleaned repo");
+
+    // save file
+    await this.dump(path.resolve(this.localConfig.repoDir, output));
+
+    this.log("saved new file");
+
+    // git add file
+    await git(["add", output]);
+    await git(["commit", "-a", "-m", `saved... ${output}`]);
+
+    this.log("git commit done");
+
+    // git tag -a -m "file" file
+    await git(["tag", "-a", "-f", "-m", output, output]);
+
+    this.log("git tag done");
+  }
+
+  async dump(dir: string) {
+    if (await fs.pathExists(path.resolve(dir, "./toc.dat"))) {
+      await fs.remove(path.resolve(dir));
+    }
 
     const pgArgs = [
-      "-Fc",
-      "-Z",
-      "9",
-      "--file",
-      path.resolve(this.localConfig.saveDir, args.output),
+      `--dbname=${this.localConfig.database.db as string}`,
+      `--jobs=${os.cpus().length}`,
+      "--compress=9",
+      "--format=directory",
+      "--no-owner",
+      `--file=${dir}`,
     ];
 
     if (this.localConfig.database.user) {
-      pgArgs.push("-U", this.localConfig.database.user);
+      pgArgs.push(`--username=${this.localConfig.database.user}`);
     }
 
-    await execa("pg_dump", [...pgArgs, this.localConfig.database.db as string]);
-
-    await this.runHook("afterSave");
+    console.time("pg_dump");
+    await execa("pg_dump", pgArgs);
+    console.timeEnd("pg_dump");
   }
 }

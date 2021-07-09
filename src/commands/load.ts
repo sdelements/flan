@@ -1,6 +1,9 @@
-import TartCommand from "../TartCommand";
-import * as execa from "execa";
 import * as path from "path";
+import * as execa from "execa";
+import * as os from "os";
+
+import TartCommand from "../TartCommand";
+import { checkDumpNameForTag } from "../utils";
 
 export default class Load extends TartCommand {
   static description = "load database from dump";
@@ -23,24 +26,36 @@ export default class Load extends TartCommand {
     await this.runHook("beforeLoad");
 
     const { args } = this.parse(Load);
+    const { input } = args;
 
-    this.log(`input file name: ${args.input}`);
+    this.log(`input file name: ${input}`);
+
+    let loadPath = this.localConfig.saveDir;
+
+    if (checkDumpNameForTag(input)) {
+      loadPath = this.localConfig.repoDir;
+
+      //git checkout db@v2
+      await execa("git", ["checkout", input], {
+        cwd: loadPath,
+      });
+    }
 
     const pgArgs = [
-      "--jobs=8",
       "--clean",
-      "-d",
-      this.localConfig.database.db as string,
+      `--jobs=${os.cpus().length}`,
+      "--schema=public",
+      `--dbname=${this.localConfig.database.db as string}`,
+      path.resolve(loadPath, input),
     ];
 
     if (this.localConfig.database.user) {
       pgArgs.push("-U", this.localConfig.database.user);
     }
 
-    await execa("pg_restore", [
-      ...pgArgs,
-      path.resolve(this.localConfig.saveDir, args.input) as string,
-    ]);
+    console.time("pg_restore");
+    await execa("pg_restore", pgArgs);
+    console.timeEnd("pg_restore");
 
     await this.runHook("afterLoad");
   }
