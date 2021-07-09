@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import * as path from "path";
 import * as execa from "execa";
 import * as fs from "fs-extra";
@@ -57,7 +58,7 @@ export default class Save extends TartCommand {
     // git checkout master TODO add check to see if master is there and toggle -b
     try {
       await git(["checkout", "master"]);
-    } catch (e) {
+    } catch (error) {
       await git(["checkout", "-b", "master"]);
     }
 

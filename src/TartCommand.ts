@@ -49,7 +49,7 @@ export default abstract class TartCommand extends Command {
 
     try {
       configJSON = await fs.readJson(configPath);
-    } catch (err) {
+    } catch (error) {
       this.error("Unable to load configuration");
     }
 

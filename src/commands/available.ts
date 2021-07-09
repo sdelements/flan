@@ -69,8 +69,6 @@ export default class Available extends TartCommand {
 
     results = [...results, ...remaining];
 
-    //console.info(results);
-
     // print out the results in a nice table
     cli.table(
       results,
@@ -100,7 +98,7 @@ export default class Available extends TartCommand {
     const tagRegex = /(?<sha>[a-z0-9]+)\srefs\/tags\/(?<tag>[\w\.\-@]+)$/gim;
 
     let match;
-    let tags = [];
+    const tags = [];
     while ((match = tagRegex.exec(stdout))) {
       if (match.groups)
         tags.push({ tag: match.groups.tag, sha: match.groups.sha });

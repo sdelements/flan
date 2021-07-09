@@ -1,3 +1,8 @@
 {
-  "extends": ["oclif", "oclif-typescript", "prettier"]
+  "extends": ["oclif", "oclif-typescript", "prettier"],
+  "rules": {
+    "no-negated-condition": "off",
+    "no-useless-escape": "off",
+    "unicorn/filename-case": "off"
+  }
 }
