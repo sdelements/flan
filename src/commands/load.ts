@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import * as path from "path";
 import * as execa from "execa";
 import * as os from "os";
@@ -39,11 +40,10 @@ export default class Load extends TartCommand {
         await execa("git", ["rev-parse", `${input}^{tag}`], {
           cwd: loadPath,
         });
-      } catch (err) {
+      } catch (error) {
         this.error(`${input} does not exist in the local repository`);
       }
 
-      //git checkout db@v2
       await execa("git", ["checkout", input], {
         cwd: loadPath,
       });

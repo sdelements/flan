@@ -62,8 +62,8 @@ export default class Fetch extends TartCommand {
       } else if (flag === GIT_FLAGS.ADD) {
         this.log("Success, file added.");
       }
-    } catch (err) {
-      if (parseFlagFromGitOutput(err.stderr) === GIT_FLAGS.REJECT) {
+    } catch (error) {
+      if (parseFlagFromGitOutput(error.stderr) === GIT_FLAGS.REJECT) {
         if (
           await cli.confirm(
             "The file already exists in your local repo, do you want to override? [y/n]"
@@ -85,7 +85,7 @@ export default class Fetch extends TartCommand {
           }
         }
       } else {
-        this.error("Could not fetch from remote repo.\n" + err);
+        this.error("Could not fetch from remote repo.\n" + error);
       }
     }
 

@@ -40,7 +40,7 @@ export default class Publish extends TartCommand {
     // check that tag exists locally
     try {
       await git(["rev-parse", `${file}^{tag}`]);
-    } catch (err) {
+    } catch (error) {
       this.error(
         `${file} is not a valid file in the repo. Try:\n   tart save ${file}@\n   tart publish ${file}@`
       );
@@ -56,10 +56,10 @@ export default class Publish extends TartCommand {
       } else if (flag === GIT_FLAGS.ADD) {
         this.log("Success, file added to remote repo.");
       }
-    } catch (err) {
+    } catch (error) {
       // if error, tag exists. ask if they want to force. if yes:
       // git push -f <repo url> <tag name>
-      if (parseFlagFromGitOutput(err.stderr) === GIT_FLAGS.REJECT) {
+      if (parseFlagFromGitOutput(error.stderr) === GIT_FLAGS.REJECT) {
         if (
           await cli.confirm(
             "The file already exists in the remote repo, do you want to override? [y/n]"
@@ -80,7 +80,7 @@ export default class Publish extends TartCommand {
           }
         }
       } else {
-        this.error("Could not publish to remote repo.\n" + err);
+        this.error("Could not publish to remote repo.\n" + error);
       }
     }
 

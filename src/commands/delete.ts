@@ -44,7 +44,7 @@ export default class Load extends TartCommand {
 
     try {
       await git(["rev-parse", `${deleteFile}^{tag}`]);
-    } catch (err) {
+    } catch (error) {
       this.error(`This database dump does not exist`);
     }
 
@@ -57,7 +57,7 @@ export default class Load extends TartCommand {
 
       try {
         await git(["checkout", "master"]);
-      } catch (e) {
+      } catch (error) {
         await git(["checkout", "-b", "master"]);
       }
 
