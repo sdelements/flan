@@ -9,7 +9,7 @@ const tableFlags = cli.table.flags();
 export default class Available extends TartCommand {
   static description = "lists available dumps";
 
-  static examples = [`$ tart list`];
+  static examples = [`$ tart available`];
 
   static flags = {
     ...TartCommand.flags,
@@ -32,6 +32,7 @@ export default class Available extends TartCommand {
     ];
 
     localTags.forEach((ltag) => {
+      // see if the local tag is also in the remote list
       const rtag = remoteTags.find((rtag) => rtag.tag === ltag.tag);
 
       if (!rtag) {
@@ -40,6 +41,9 @@ export default class Available extends TartCommand {
           status: `${chalk.bold("*")} (local)`,
         });
       } else {
+        // compare the SHA of the local and remote tag,
+        // if it's the same the commit is the same and the tag is up to date
+        // if it's not then the file on the remote repo is different
         if (rtag.sha === ltag.sha) {
           results.push({
             ...ltag,
@@ -52,10 +56,12 @@ export default class Available extends TartCommand {
           });
         }
 
+        // remove the tag from the remote list
         remaining = remaining.filter((rtag) => rtag.tag !== ltag.tag);
       }
     });
 
+    // any tags left in remaining are only in the remote repo, label them
     remaining = remaining.map((rtag) => ({
       ...rtag,
       status: chalk.blue(`${chalk.bold("*")} (remote)`),
@@ -65,6 +71,7 @@ export default class Available extends TartCommand {
 
     //console.info(results);
 
+    // print out the restuls in a nice table
     cli.table(
       results,
       {
