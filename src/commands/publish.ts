@@ -59,24 +59,25 @@ export default class Publish extends TartCommand {
     } catch (err) {
       // if error, tag exists. ask if they want to force. if yes:
       // git push -f <repo url> <tag name>
-      if (
-        parseFlagFromGitOutput(err.stderr) === GIT_FLAGS.REJECT &&
-        (await cli.confirm(
-          "The file already exists in the remote repo, do you want to override? [y/n]"
-        ))
-      ) {
-        this.log("Overriding...");
+      if (parseFlagFromGitOutput(err.stderr) === GIT_FLAGS.REJECT) {
+        if (
+          await cli.confirm(
+            "The file already exists in the remote repo, do you want to override? [y/n]"
+          )
+        ) {
+          this.log("Overriding...");
 
-        const { stderr } = await git([
-          "push",
-          "-f",
-          "--verbose",
-          repository,
-          file,
-        ]);
+          const { stderr } = await git([
+            "push",
+            "-f",
+            "--verbose",
+            repository,
+            file,
+          ]);
 
-        if (parseFlagFromGitOutput(stderr) === GIT_FLAGS.FORCE_ADD) {
-          this.log("File overriden in remote repo.");
+          if (parseFlagFromGitOutput(stderr) === GIT_FLAGS.FORCE_ADD) {
+            this.log("File overriden in remote repo.");
+          }
         }
       } else {
         this.error("Could not publish to remote repo.\n" + err);

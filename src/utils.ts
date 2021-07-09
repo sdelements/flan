@@ -4,7 +4,7 @@ export const createExecaCommand =
   (command: string, config: {}) => async (params: string[]) =>
     execa(command, params, config);
 
-export const checkDumpName = (name: string) => {
+export const checkDumpNameForTag = (name: string) => {
   return /^[a-z_-]+@(\d+.)?.?(\d+.)?.?(\d+)$/i.test(name);
 };
 

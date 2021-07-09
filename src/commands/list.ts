@@ -20,10 +20,14 @@ export default class List extends TartCommand {
       .filter((dirent) => dirent.isDirectory())
       .map((dirent) => dirent.name);
 
-    for (const file of files) {
-      if (await fs.pathExists(path.resolve(this.localConfig.saveDir, file, "./toc.dat"))) {
+    files.forEach((file) => {
+      if (
+        fs.pathExistsSync(
+          path.resolve(this.localConfig.saveDir, file, "./toc.dat")
+        )
+      ) {
         this.log(file);
       }
-    }
+    });
   }
 }

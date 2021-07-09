@@ -3,7 +3,7 @@ import * as execa from "execa";
 import * as os from "os";
 
 import TartCommand from "../TartCommand";
-import { checkDumpName } from "../utils";
+import { checkDumpNameForTag } from "../utils";
 
 export default class Load extends TartCommand {
   static description = "load database from dump";
@@ -32,7 +32,7 @@ export default class Load extends TartCommand {
 
     let loadPath = this.localConfig.saveDir;
 
-    if (checkDumpName(input)) {
+    if (checkDumpNameForTag(input)) {
       loadPath = this.localConfig.repoDir;
 
       //git checkout db@v2

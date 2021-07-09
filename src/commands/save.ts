@@ -4,7 +4,7 @@ import * as fs from "fs-extra";
 import * as os from "os";
 
 import TartCommand from "../TartCommand";
-import { createExecaCommand, checkDumpName } from "../utils";
+import { createExecaCommand, checkDumpNameForTag } from "../utils";
 
 export default class Save extends TartCommand {
   static description = "save current database to dump";
@@ -31,7 +31,7 @@ export default class Save extends TartCommand {
 
     this.log(`output file name: ${output}`);
 
-    if (checkDumpName(output)) {
+    if (checkDumpNameForTag(output)) {
       await this.dumpWithRepo({ output });
     } else {
       await this.dump(path.resolve(this.localConfig.saveDir, output));

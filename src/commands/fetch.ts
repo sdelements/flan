@@ -37,6 +37,12 @@ export default class Fetch extends TartCommand {
 
     this.log(`file: ${file} || repo: ${repository}`);
 
+    const { stdout } = await git(["ls-remote", "--tags", repository || ""]);
+    const remoteTagsRegex = new RegExp(`refs/tags/${file}$`, "m");
+    if (!remoteTagsRegex.test(stdout)) {
+      this.error(`${file} does not exist in the remote repository`);
+    }
+
     // git fetch --dry-run --verbose ../remote_repo/.git/ tag hobi@ --no-tags
 
     try {
@@ -47,6 +53,7 @@ export default class Fetch extends TartCommand {
         "tag",
         file,
         "--no-tags",
+        "--dry-run",
       ]);
 
       const flag = parseFlagFromGitOutput(stderr);
@@ -56,27 +63,26 @@ export default class Fetch extends TartCommand {
         this.log("Success, file added.");
       }
     } catch (err) {
-      if (err.exitCode === 128) {
-        this.error("The file does not exist in the remote repo.");
-      } else if (
-        parseFlagFromGitOutput(err.stderr) === GIT_FLAGS.REJECT &&
-        (await cli.confirm(
-          "The file already exists in your local repo, do you want to override? [y/n]"
-        ))
-      ) {
-        const { stderr } = await git([
-          "fetch",
-          "-f",
-          "--verbose",
-          repository,
-          "tag",
-          file,
-          "--no-tags",
-        ]);
+      if (parseFlagFromGitOutput(err.stderr) === GIT_FLAGS.REJECT) {
+        if (
+          await cli.confirm(
+            "The file already exists in your local repo, do you want to override? [y/n]"
+          )
+        ) {
+          const { stderr } = await git([
+            "fetch",
+            "-f",
+            "--verbose",
+            repository,
+            "tag",
+            file,
+            "--no-tags",
+          ]);
 
-        const flag = parseFlagFromGitOutput(stderr);
-        if (flag === GIT_FLAGS.TAG_FORCE_ADD) {
-          this.log("File overriden.");
+          const flag = parseFlagFromGitOutput(stderr);
+          if (flag === GIT_FLAGS.TAG_FORCE_ADD) {
+            this.log("File overriden.");
+          }
         }
       } else {
         this.error("Could not fetch from remote repo.\n" + err);
