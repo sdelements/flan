@@ -30,23 +30,22 @@ export default class Unpublish extends TartCommand {
 
     const { args } = this.parse(Unpublish);
     const { file } = args;
-    const url = this.localConfig.repository;
-    if (!url) {
+    const repository = this.localConfig.repository;
+    if (!repository) {
       this.error("You must set a remote repository to unpublish.");
     }
 
-    this.log(`file: ${file} || repo: ${url}`);
+    this.log(`file: ${file} || repo: ${repository}`);
 
     const git = createExecaCommand("git", {
       cwd: this.localConfig.repoDir,
     });
 
     // check that tag exists in remote
-    const { stdout } = await git(["ls-remote", "--tags", url]);
+    const { stdout } = await git(["ls-remote", "--tags", repository]);
     const remoteTagsRegex = new RegExp(`refs/tags/${file}$`, "m");
     if (!remoteTagsRegex.test(stdout)) {
-      this.log(`${file} does not exist in the remote repository`);
-      return;
+      this.error(`${file} does not exist in the remote repository`);
     }
 
     if (
@@ -58,7 +57,7 @@ export default class Unpublish extends TartCommand {
         "push",
         "--delete",
         "--verbose",
-        url,
+        repository,
         file,
       ]);
 

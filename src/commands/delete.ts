@@ -41,8 +41,10 @@ export default class Load extends TartCommand {
     const git = createExecaCommand("git", {
       cwd: this.localConfig.repoDir,
     });
-    const { stdout } = await git(["tag"]);
-    if (!stdout.includes(deleteFile)) {
+
+    try {
+      await git(["rev-parse", `${deleteFile}^{tag}`]);
+    } catch (err) {
       this.error(`This database dump does not exist`);
     }
 
