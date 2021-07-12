@@ -22,7 +22,7 @@ export default class List extends TartCommand {
 
     files.forEach((file) => {
       if (
-        fs.pathExistsSync(
+        await fs.pathExists(
           path.resolve(this.localConfig.saveDir, file, "./toc.dat")
         )
       ) {
