@@ -43,7 +43,7 @@ export default abstract class TartCommand extends Command {
     // see: https://github.com/oclif/oclif/issues/225#issuecomment-806318444
     const { flags } = this.parse(this.ctor);
 
-    await this.loadConfigFile(flags.config as unknown as string);
+    await this.loadConfigFile((flags.config as unknown) as string);
   }
 
   async loadConfigFile(configPath: string) {
@@ -51,8 +51,8 @@ export default abstract class TartCommand extends Command {
 
     try {
       configJSON = await fs.readJson(configPath);
-    } catch (err) {
-      this.error("Unable to load configuration file");
+    } catch (error) {
+      this.error("Unable to load configuration");
     }
 
     this.localConfig = {
@@ -68,6 +68,10 @@ export default abstract class TartCommand extends Command {
         configJSON.baseDir || this.localConfig.baseDir,
         "./local"
       ),
+      database: {
+        ...this.localConfig.database,
+        ...configJSON.database,
+      },
     };
 
     if (configJSON.repoDir) {
@@ -80,14 +84,6 @@ export default abstract class TartCommand extends Command {
 
     if (!this.localConfig.database.db) {
       this.error("Database is required");
-    }
-  
-    if (!this.localConfig.database.host) {
-      this.error("Database host is required");
-    }
-
-    if (!this.localConfig.baseDir) {
-      this.error("Base directory is required");
     }
   }
 

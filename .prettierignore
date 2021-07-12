@@ -7,7 +7,5 @@
 /tmp
 node_modules
 *.config.*
-*.hooks.*
 .tart
-.eslintcache
-.vscode
+bin

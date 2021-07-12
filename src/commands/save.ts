@@ -1,10 +1,11 @@
+/* eslint-disable no-console */
 import * as path from "path";
 import * as execa from "execa";
 import * as fs from "fs-extra";
 import * as os from "os";
 
 import TartCommand from "../TartCommand";
-import { createExecaCommand } from "../utils";
+import { createExecaCommand, checkDumpNameForTag } from "../utils";
 
 export default class Save extends TartCommand {
   static description = "save current database to dump";
@@ -31,7 +32,7 @@ export default class Save extends TartCommand {
 
     this.log(`output file name: ${output}`);
 
-    if (output.includes("@")) {
+    if (checkDumpNameForTag(output)) {
       await this.dumpWithRepo({ output });
     } else {
       await this.dump(path.resolve(this.localConfig.saveDir, output));
@@ -40,12 +41,7 @@ export default class Save extends TartCommand {
     await this.runHook("afterSave");
   }
 
-  async dumpWithRepo({
-    output
-  }: {
-    output: string
-    }) {
-    
+  async dumpWithRepo({ output }: { output: string }) {
     // git checkout master
     // git update-ref -d HEAD
     // git reset --hard
@@ -62,11 +58,11 @@ export default class Save extends TartCommand {
     // git checkout master TODO add check to see if master is there and toggle -b
     try {
       await git(["checkout", "master"]);
-    } catch (e) {
+    } catch (error) {
       await git(["checkout", "-b", "master"]);
     }
 
-    this.log("checked out master")
+    this.log("checked out master");
 
     await git(["update-ref", "-d", "HEAD"]);
     await git(["reset", "--hard"]);
@@ -91,9 +87,8 @@ export default class Save extends TartCommand {
   }
 
   async dump(dir: string) {
-
     if (await fs.pathExists(path.resolve(dir, "./toc.dat"))) {
-      await fs.remove(path.resolve(dir))
+      await fs.remove(path.resolve(dir));
     }
 
     const pgArgs = [
@@ -102,10 +97,11 @@ export default class Save extends TartCommand {
       "--compress=9",
       "--format=directory",
       "--no-owner",
-      `--file=${dir}`]
+      `--file=${dir}`,
+    ];
 
     if (this.localConfig.database.user) {
-      pgArgs.push(`--username=${this.localConfig.database.user}`)
+      pgArgs.push(`--username=${this.localConfig.database.user}`);
     }
 
     console.time("pg_dump");
