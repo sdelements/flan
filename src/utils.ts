@@ -1,4 +1,4 @@
-import * as execa from "execa";
+import execa from "execa";
 
 export const createExecaCommand =
   (command: string, config: {}) => async (params: string[]) =>

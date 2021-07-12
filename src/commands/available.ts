@@ -1,12 +1,12 @@
 import cli from "cli-ux";
-import * as chalk from "chalk";
-import * as execa from "execa";
+import chalk from "chalk";
+import execa from "execa";
 
 import TartCommand from "../TartCommand";
 
 const tableFlags = cli.table.flags();
 
-type GitTag = { tag: string; sha: string; status?: string }
+type GitTag = { tag: string; sha: string; status?: string };
 
 export default class Available extends TartCommand {
   static description = "lists available dumps";
@@ -30,9 +30,7 @@ export default class Available extends TartCommand {
     }
 
     let results: GitTag[] = [];
-    let remaining: GitTag[] = [
-      ...remoteTags,
-    ];
+    let remaining: GitTag[] = [...remoteTags];
 
     localTags.forEach((ltag) => {
       // see if the local tag is also in the remote list

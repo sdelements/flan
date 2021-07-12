@@ -1,6 +1,6 @@
-import * as fs from "fs-extra";
-import * as path from "path";
-import * as execa from "execa";
+import fs from "fs-extra";
+import path from "path";
+import execa from "execa";
 import cli from "cli-ux";
 
 import TartCommand from "../TartCommand";
@@ -39,10 +39,13 @@ Config file found at home/tart/some-folder/tart.config.json
       if (await cli.confirm("A config file will be created, continue? [y/n]")) {
         const db = await cli.prompt("Please enter your database name");
 
-        const host = await cli.prompt("(Optional) Please enter your database host", {
-          required: false,
-          default: 'localhost'
-        });
+        const host = await cli.prompt(
+          "(Optional) Please enter your database host",
+          {
+            required: false,
+            default: "localhost",
+          }
+        );
 
         const user = await cli.prompt(
           "(Optional) Please enter your database username",
@@ -65,18 +68,22 @@ Config file found at home/tart/some-folder/tart.config.json
           )}`
         );
 
-        await fs.outputJson(configPath, {
-          baseDir: this.localConfig.baseDir,
-          database: {
-            host,
-            password,
-            db,
-            user,
+        await fs.outputJson(
+          configPath,
+          {
+            baseDir: this.localConfig.baseDir,
+            database: {
+              host,
+              password,
+              db,
+              user,
+            },
+            repository,
           },
-          repository
-        }, {
-          spaces: 2
-        });
+          {
+            spaces: 2,
+          }
+        );
       }
     } else {
       this.log(`Config file found at ${path.resolve(configPath)}`);
@@ -128,7 +135,6 @@ Config file found at home/tart/some-folder/tart.config.json
           `A git repository will be initialized at ${repoDir}, continue? [y/n]`
         )
       ) {
-        
         await fs.ensureDir(repoDir);
         await execa("git", ["init"], {
           cwd: repoDir,
