@@ -6,6 +6,8 @@ import TartCommand from "../TartCommand";
 
 const tableFlags = cli.table.flags();
 
+type GitTag = { tag: string; sha: string; status?: string }
+
 export default class Available extends TartCommand {
   static description = "lists available dumps";
 
@@ -21,10 +23,14 @@ export default class Available extends TartCommand {
     const { flags } = this.parse(Available);
 
     const localTags = await this.getTags(".");
-    const remoteTags = await this.getTags(this.localConfig.repository || "");
+    let remoteTags: GitTag[] = [];
 
-    let results: { tag: string; sha: string; status?: string }[] = [];
-    let remaining: { tag: string; sha: string; status?: string }[] = [
+    if (this.localConfig.repository) {
+      remoteTags = await this.getTags(this.localConfig.repository);
+    }
+
+    let results: GitTag[] = [];
+    let remaining: GitTag[] = [
       ...remoteTags,
     ];
 
