@@ -31,6 +31,7 @@ export default class Unpublish extends TartCommand {
     const { args } = this.parse(Unpublish);
     const { file } = args;
     const repository = this.localConfig.repository;
+
     if (!repository) {
       this.error("You must set a remote repository to unpublish.");
     }
@@ -44,6 +45,7 @@ export default class Unpublish extends TartCommand {
     // check that tag exists in remote
     const { stdout } = await git(["ls-remote", "--tags", repository]);
     const remoteTagsRegex = new RegExp(`refs/tags/${file}$`, "m");
+
     if (!remoteTagsRegex.test(stdout)) {
       this.error(`${file} does not exist in the remote repository`);
     }
@@ -62,6 +64,7 @@ export default class Unpublish extends TartCommand {
       ]);
 
       const flag = parseFlagFromGitOutput(stderr);
+
       if (flag === GIT_FLAGS.REMOVE) {
         this.log("Success, file unpublished from the remote repo.");
       }

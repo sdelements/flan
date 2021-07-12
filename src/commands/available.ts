@@ -23,9 +23,6 @@ export default class Available extends TartCommand {
     const localTags = await this.getTags(".");
     const remoteTags = await this.getTags(this.localConfig.repository || "");
 
-    // console.info("local tags: ", localTags);
-    // console.info("remote tags: ", remoteTags);
-
     let results: { tag: string; sha: string; status?: string }[] = [];
     let remaining: { tag: string; sha: string; status?: string }[] = [
       ...remoteTags,
