@@ -1,8 +1,8 @@
 {
   "name": "@sdelements/tart",
   "description": "A tool to load, save and publish db snapshots",
-  "version": "0.0.0",
-  "author": "Houssam",
+  "version": "0.1.0-alpha.0",
+  "author": "Houssam Haidar",
   "bin": {
     "tart": "./bin/run"
   },
@@ -51,7 +51,9 @@
   ],
   "homepage": "https://github.com/sdelements/tart",
   "keywords": [
-    "oclif"
+    "database",
+    "postgres",
+    "dump"
   ],
   "license": "MIT",
   "main": "lib/index.js",

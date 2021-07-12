@@ -23,7 +23,7 @@ $ npm install -g @sdelements/tart
 $ tart COMMAND
 running command...
 $ tart (-v|--version|version)
-@sdelements/tart/0.0.0 linux-x64 node-v14.16.0
+@sdelements/tart/0.1.0-alpha.0 darwin-x64 node-v14.16.1
 $ tart --help [COMMAND]
 USAGE
   $ tart COMMAND
@@ -37,10 +37,16 @@ USAGE
 <!-- commands -->
 
 - [`tart autocomplete [SHELL]`](#tart-autocomplete-shell)
+- [`tart available`](#tart-available)
+- [`tart delete DELETEFILE`](#tart-delete-deletefile)
+- [`tart fetch FILE`](#tart-fetch-file)
 - [`tart help [COMMAND]`](#tart-help-command)
+- [`tart init`](#tart-init)
 - [`tart list`](#tart-list)
 - [`tart load INPUT`](#tart-load-input)
+- [`tart publish FILE`](#tart-publish-file)
 - [`tart save OUTPUT`](#tart-save-output)
+- [`tart unpublish FILE`](#tart-unpublish-file)
 
 ## `tart autocomplete [SHELL]`
 
@@ -65,6 +71,72 @@ EXAMPLES
 
 _See code: [@oclif/plugin-autocomplete](https://github.com/oclif/plugin-autocomplete/blob/v0.3.0/src/commands/autocomplete/index.ts)_
 
+## `tart available`
+
+lists available dumps
+
+```
+USAGE
+  $ tart available
+
+OPTIONS
+  -c, --config=config     [default: ./tart.config.json] Path to configuration file
+  -x, --extended          show extra columns
+  --columns=columns       only show provided columns (comma-separated)
+  --csv                   output is csv format [alias: --output=csv]
+  --filter=filter         filter property by partial string matching, ex: name=foo
+  --no-header             hide table header from output
+  --no-truncate           do not truncate output to fit screen
+  --output=csv|json|yaml  output in a more machine friendly format
+  --sort=sort             [default: tag] property to sort by (prepend '-' for descending)
+
+EXAMPLE
+  $ tart available
+```
+
+_See code: [src/commands/available.ts](https://github.com/sdelements/tart/blob/v0.1.0-alpha.0/src/commands/available.ts)_
+
+## `tart delete DELETEFILE`
+
+delete a local database dump
+
+```
+USAGE
+  $ tart delete DELETEFILE
+
+ARGUMENTS
+  DELETEFILE  name of file to delete
+
+OPTIONS
+  -c, --config=config  [default: ./tart.config.json] Path to configuration file
+
+EXAMPLES
+  $ tart delete myDB
+  $ tart delete myDB@1.0.0
+```
+
+_See code: [src/commands/delete.ts](https://github.com/sdelements/tart/blob/v0.1.0-alpha.0/src/commands/delete.ts)_
+
+## `tart fetch FILE`
+
+fetch specified dump file from a remote repository
+
+```
+USAGE
+  $ tart fetch FILE
+
+ARGUMENTS
+  FILE  name of the file
+
+OPTIONS
+  -c, --config=config  [default: ./tart.config.json] Path to configuration file
+
+EXAMPLE
+  $ tart fetch filename
+```
+
+_See code: [src/commands/fetch.ts](https://github.com/sdelements/tart/blob/v0.1.0-alpha.0/src/commands/fetch.ts)_
+
 ## `tart help [COMMAND]`
 
 display help for tart
@@ -82,6 +154,30 @@ OPTIONS
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.2/src/commands/help.ts)_
 
+## `tart init`
+
+Initializes tart for this project
+
+```
+USAGE
+  $ tart init
+
+OPTIONS
+  -c, --config=config  [default: ./tart.config.json] Path to configuration file
+
+EXAMPLES
+  $ tart init
+  Config file found at home/tart.config.js
+
+  $ tart init
+  A config file will be created, continue? [y/n]
+
+  $ tart init -c /some-folder/tart.config.json
+  Config file found at home/tart/some-folder/tart.config.json
+```
+
+_See code: [src/commands/init.ts](https://github.com/sdelements/tart/blob/v0.1.0-alpha.0/src/commands/init.ts)_
+
 ## `tart list`
 
 lists available dumps
@@ -97,7 +193,7 @@ EXAMPLE
   $ tart list
 ```
 
-_See code: [src/commands/list.ts](https://github.com/sdelements/tart/blob/v0.0.0/src/commands/list.ts)_
+_See code: [src/commands/list.ts](https://github.com/sdelements/tart/blob/v0.1.0-alpha.0/src/commands/list.ts)_
 
 ## `tart load INPUT`
 
@@ -117,7 +213,27 @@ EXAMPLE
   $ tart load myDB
 ```
 
-_See code: [src/commands/load.ts](https://github.com/sdelements/tart/blob/v0.0.0/src/commands/load.ts)_
+_See code: [src/commands/load.ts](https://github.com/sdelements/tart/blob/v0.1.0-alpha.0/src/commands/load.ts)_
+
+## `tart publish FILE`
+
+publish specified dump file to a remote repository
+
+```
+USAGE
+  $ tart publish FILE
+
+ARGUMENTS
+  FILE  name of the file
+
+OPTIONS
+  -c, --config=config  [default: ./tart.config.json] Path to configuration file
+
+EXAMPLE
+  $ tart publish filename
+```
+
+_See code: [src/commands/publish.ts](https://github.com/sdelements/tart/blob/v0.1.0-alpha.0/src/commands/publish.ts)_
 
 ## `tart save OUTPUT`
 
@@ -137,6 +253,26 @@ EXAMPLE
   $ tart save myDB
 ```
 
-_See code: [src/commands/save.ts](https://github.com/sdelements/tart/blob/v0.0.0/src/commands/save.ts)_
+_See code: [src/commands/save.ts](https://github.com/sdelements/tart/blob/v0.1.0-alpha.0/src/commands/save.ts)_
+
+## `tart unpublish FILE`
+
+unpublish specified database dump from a remote repository
+
+```
+USAGE
+  $ tart unpublish FILE
+
+ARGUMENTS
+  FILE  name of the file
+
+OPTIONS
+  -c, --config=config  [default: ./tart.config.json] Path to configuration file
+
+EXAMPLE
+  $ tart unpublish myDB@1.0.0
+```
+
+_See code: [src/commands/unpublish.ts](https://github.com/sdelements/tart/blob/v0.1.0-alpha.0/src/commands/unpublish.ts)_
 
 <!-- commandsstop -->
