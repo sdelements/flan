@@ -70,11 +70,11 @@ export default class Load extends TartCommand {
 
   async deleteLocalFile(deleteFile: string) {
     const deleteFilePath = path.resolve(this.localConfig.saveDir, deleteFile);
-    if (!(await fs.pathExists(deleteFilePath))) {
+    if (!(await fs.pathExists(path.resolve(deleteFilePath, "./toc.dat")))) {
       this.error(`This file does not exist`);
     }
 
-    if (!(await fs.lstat(deleteFilePath)).isFile()) {
+    if (!(await fs.lstat(deleteFilePath)).isDirectory()) {
       this.error(`This is not a valid file`);
     }
 
