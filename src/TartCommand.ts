@@ -35,6 +35,7 @@ export default abstract class TartCommand extends Command {
       database: {
         host: "localhost",
         db: "",
+        user: "",
       },
     };
   }
@@ -43,7 +44,7 @@ export default abstract class TartCommand extends Command {
     // see: https://github.com/oclif/oclif/issues/225#issuecomment-806318444
     const { flags } = this.parse(this.ctor);
 
-    await this.loadConfigFile((flags.config as unknown) as string);
+    await this.loadConfigFile(flags.config as unknown as string);
   }
 
   async loadConfigFile(configPath: string) {
@@ -84,6 +85,10 @@ export default abstract class TartCommand extends Command {
 
     if (!this.localConfig.database.db) {
       this.error("Database is required");
+    }
+
+    if (!this.localConfig.database.user) {
+      this.error("Database username is required");
     }
   }
 

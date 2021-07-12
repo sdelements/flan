@@ -49,20 +49,35 @@ export default class Load extends TartCommand {
       });
     }
 
-    const pgArgs = [
-      "--clean",
-      `--jobs=${os.cpus().length}`,
-      "--schema=public",
-      `--dbname=${this.localConfig.database.db as string}`,
-      path.resolve(loadPath, input),
-    ];
-
+    console.time("pg_restore");
     if (this.localConfig.database.user) {
-      pgArgs.push("-U", this.localConfig.database.user);
+      execa("psql", [
+        "-U",
+        this.localConfig.database.user as string,
+        "-c",
+        "DROP SCHEMA public CASCADE; CREATE SCHEMA public",
+      ]);
     }
 
-    console.time("pg_restore");
-    await execa("pg_restore", pgArgs);
+    try {
+      await execa("pg_restore", [
+        "--clean",
+        `--jobs=${Math.floor(os.cpus().length / 2)}`,
+        "--schema=public",
+        "-U",
+        this.localConfig.database.user as string,
+        `--dbname=${this.localConfig.database.db as string}`,
+        path.resolve(loadPath, input),
+      ]);
+    } catch (error) {
+      if (
+        !/pg_restore: warning: errors ignored on restore: \d+\s*$/gim.test(
+          error.stderr
+        )
+      ) {
+        this.error(error.stderr || error.message);
+      }
+    }
     console.timeEnd("pg_restore");
 
     await this.runHook("afterLoad");

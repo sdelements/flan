@@ -93,16 +93,15 @@ export default class Save extends TartCommand {
 
     const pgArgs = [
       `--dbname=${this.localConfig.database.db as string}`,
-      `--jobs=${os.cpus().length}`,
+      `--jobs=${Math.floor(os.cpus().length / 2)}`,
       "--compress=9",
       "--format=directory",
+      "--clean",
       "--no-owner",
+      "-U",
+      this.localConfig.database.user as string,
       `--file=${dir}`,
     ];
-
-    if (this.localConfig.database.user) {
-      pgArgs.push(`--username=${this.localConfig.database.user}`);
-    }
 
     console.time("pg_dump");
     await execa("pg_dump", pgArgs);
