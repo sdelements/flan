@@ -2,9 +2,13 @@
 import path from "path";
 import execa from "execa";
 import os from "os";
+import cli from "cli-ux";
 
 import TartCommand from "../TartCommand";
-import { checkDumpNameForTag } from "../utils";
+
+import Fetch from "./fetch";
+
+import { createExecaCommand, checkDumpNameForTag } from "../utils";
 
 export default class Load extends TartCommand {
   static description = "load database from dump";
@@ -26,6 +30,10 @@ export default class Load extends TartCommand {
   async run() {
     await this.runHook("beforeLoad");
 
+    const git = createExecaCommand("git", {
+      cwd: this.localConfig.repoDir,
+    });
+
     const { args } = this.parse(Load);
     const { input } = args;
 
@@ -41,7 +49,25 @@ export default class Load extends TartCommand {
           cwd: loadPath,
         });
       } catch (error) {
-        this.error(`${input} does not exist in the local repository`);
+        const { stdout } = await git([
+          "ls-remote",
+          "--tags",
+          this.localConfig.repository || "",
+        ]);
+
+        const remoteTagsRegex = new RegExp(`refs/tags/${input}$`, "m");
+
+        if (remoteTagsRegex.test(stdout)) {
+          if (
+            await cli.confirm(`${input} was found on remote, attempt to fetch?`)
+          ) {
+            await Fetch.run([input]);
+          } else {
+            this.exit(1);
+          }
+        } else {
+          this.error(`${input} does not exist in any repository`);
+        }
       }
 
       await execa("git", ["checkout", input], {
