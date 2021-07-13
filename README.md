@@ -3,9 +3,9 @@
 A tool to load, save and publish db snapshots
 
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
-[![Version](https://img.shields.io/npm/v/tart.svg)](https://npmjs.org/package/@sdelements/tart)
-[![Downloads/week](https://img.shields.io/npm/dw/tart.svg)](https://npmjs.org/package/@sdelements/tart)
-[![License](https://img.shields.io/npm/l/tart.svg)](https://github.com/sdelements/tart/blob/master/package.json)
+[![Version](https://img.shields.io/npm/v/@sdelements/tart.svg)](https://npmjs.org/package/@sdelements/tart)
+[![Downloads/week](https://img.shields.io/npm/dw/@sdelements/tart.svg)](https://npmjs.org/package/@sdelements/tart)
+[![License](https://img.shields.io/npm/l/@sdelements/tart.svg)](https://github.com/sdelements/tart/blob/master/package.json)
 
 <!-- toc -->
 
