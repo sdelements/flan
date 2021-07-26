@@ -15,21 +15,35 @@
 
 # Usage
 
-<!-- usage -->
-
 ```sh-session
 $ npm install -g @sdelements/flan
-$ flan COMMAND
-running command...
+
+$ flan init
+running setup...
+
+$ flan save mydb@1.0.0
+saving...
+
+$ flan load mydb@1.0.0
+loading...
+
 $ flan (-v|--version|version)
 @sdelements/flan/0.1.0-alpha.0 darwin-x64 node-v14.16.1
+
 $ flan --help [COMMAND]
 USAGE
   $ flan COMMAND
 ...
 ```
 
-<!-- usagestop -->
+# How it works
+
+Under the hood flan is a convenient wrapper for `pgdump` and `pgrestore`. It uses parallel jobs by default to ensure dumping/restoring your database is quick.
+
+Sharing database dumps is achieved by leveraging `git`. Essentially you push a tag to a repository of your choosing (defined in `flan.config.js`) and others can then pull it with `tart fetch`. We chose to use git because it fits well with our internal tooling and process but we understand it may not be the best solution for you. Pull requests are welcome if you're interested in leveraging S3/Azure/etc 🙂
+
+> :warning: **WARNING**: Please don't use flan in situations where you can't afford data loss.
+
 
 # Commands
 
@@ -275,6 +289,8 @@ EXAMPLE
 _See code: [src/commands/unpublish.ts](https://github.com/sdelements/flan/blob/v0.1.0-alpha.0/src/commands/unpublish.ts)_
 
 <!-- commandsstop -->
+
+<hr />
 
 <p align="center">
   From Toronto with love ❤️
