@@ -1,15 +1,15 @@
-# tart
+# flan
 
 A tool to load, save and publish db snapshots
 
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
-[![Version](https://img.shields.io/npm/v/@sdelements/tart.svg)](https://npmjs.org/package/@sdelements/tart)
-[![Downloads/week](https://img.shields.io/npm/dw/@sdelements/tart.svg)](https://npmjs.org/package/@sdelements/tart)
-[![License](https://img.shields.io/npm/l/@sdelements/tart.svg)](https://github.com/sdelements/tart/blob/master/package.json)
+[![Version](https://img.shields.io/npm/v/@sdelements/flan.svg)](https://npmjs.org/package/@sdelements/flan)
+[![Downloads/week](https://img.shields.io/npm/dw/@sdelements/flan.svg)](https://npmjs.org/package/@sdelements/flan)
+[![License](https://img.shields.io/npm/l/@sdelements/flan.svg)](https://github.com/sdelements/flan/blob/master/package.json)
 
 <!-- toc -->
 
-- [tart](#tart)
+- [flan](#flan)
 - [Usage](#usage)
 - [Commands](#commands)
 <!-- tocstop -->
@@ -19,14 +19,14 @@ A tool to load, save and publish db snapshots
 <!-- usage -->
 
 ```sh-session
-$ npm install -g @sdelements/tart
-$ tart COMMAND
+$ npm install -g @sdelements/flan
+$ flan COMMAND
 running command...
-$ tart (-v|--version|version)
-@sdelements/tart/0.1.0-alpha.0 darwin-x64 node-v14.16.1
-$ tart --help [COMMAND]
+$ flan (-v|--version|version)
+@sdelements/flan/0.1.0-alpha.0 darwin-x64 node-v14.16.1
+$ flan --help [COMMAND]
 USAGE
-  $ tart COMMAND
+  $ flan COMMAND
 ...
 ```
 
@@ -36,25 +36,25 @@ USAGE
 
 <!-- commands -->
 
-- [`tart autocomplete [SHELL]`](#tart-autocomplete-shell)
-- [`tart available`](#tart-available)
-- [`tart delete DELETEFILE`](#tart-delete-deletefile)
-- [`tart fetch FILE`](#tart-fetch-file)
-- [`tart help [COMMAND]`](#tart-help-command)
-- [`tart init`](#tart-init)
-- [`tart list`](#tart-list)
-- [`tart load INPUT`](#tart-load-input)
-- [`tart publish FILE`](#tart-publish-file)
-- [`tart save OUTPUT`](#tart-save-output)
-- [`tart unpublish FILE`](#tart-unpublish-file)
+- [`flan autocomplete [SHELL]`](#flan-autocomplete-shell)
+- [`flan available`](#flan-available)
+- [`flan delete DELETEFILE`](#flan-delete-deletefile)
+- [`flan fetch FILE`](#flan-fetch-file)
+- [`flan help [COMMAND]`](#flan-help-command)
+- [`flan init`](#flan-init)
+- [`flan list`](#flan-list)
+- [`flan load INPUT`](#flan-load-input)
+- [`flan publish FILE`](#flan-publish-file)
+- [`flan save OUTPUT`](#flan-save-output)
+- [`flan unpublish FILE`](#flan-unpublish-file)
 
-## `tart autocomplete [SHELL]`
+## `flan autocomplete [SHELL]`
 
 display autocomplete installation instructions
 
 ```
 USAGE
-  $ tart autocomplete [SHELL]
+  $ flan autocomplete [SHELL]
 
 ARGUMENTS
   SHELL  shell type
@@ -63,24 +63,24 @@ OPTIONS
   -r, --refresh-cache  Refresh cache (ignores displaying instructions)
 
 EXAMPLES
-  $ tart autocomplete
-  $ tart autocomplete bash
-  $ tart autocomplete zsh
-  $ tart autocomplete --refresh-cache
+  $ flan autocomplete
+  $ flan autocomplete bash
+  $ flan autocomplete zsh
+  $ flan autocomplete --refresh-cache
 ```
 
 _See code: [@oclif/plugin-autocomplete](https://github.com/oclif/plugin-autocomplete/blob/v0.3.0/src/commands/autocomplete/index.ts)_
 
-## `tart available`
+## `flan available`
 
 lists available dumps
 
 ```
 USAGE
-  $ tart available
+  $ flan available
 
 OPTIONS
-  -c, --config=config     [default: ./tart.config.json] Path to configuration file
+  -c, --config=config     [default: ./flan.config.json] Path to configuration file
   -x, --extended          show extra columns
   --columns=columns       only show provided columns (comma-separated)
   --csv                   output is csv format [alias: --output=csv]
@@ -91,59 +91,59 @@ OPTIONS
   --sort=sort             [default: tag] property to sort by (prepend '-' for descending)
 
 EXAMPLE
-  $ tart available
+  $ flan available
 ```
 
-_See code: [src/commands/available.ts](https://github.com/sdelements/tart/blob/v0.1.0-alpha.0/src/commands/available.ts)_
+_See code: [src/commands/available.ts](https://github.com/sdelements/flan/blob/v0.1.0-alpha.0/src/commands/available.ts)_
 
-## `tart delete DELETEFILE`
+## `flan delete DELETEFILE`
 
 delete a local database dump
 
 ```
 USAGE
-  $ tart delete DELETEFILE
+  $ flan delete DELETEFILE
 
 ARGUMENTS
   DELETEFILE  name of file to delete
 
 OPTIONS
-  -c, --config=config  [default: ./tart.config.json] Path to configuration file
+  -c, --config=config  [default: ./flan.config.json] Path to configuration file
 
 EXAMPLES
-  $ tart delete myDB
-  $ tart delete myDB@1.0.0
+  $ flan delete myDB
+  $ flan delete myDB@1.0.0
 ```
 
-_See code: [src/commands/delete.ts](https://github.com/sdelements/tart/blob/v0.1.0-alpha.0/src/commands/delete.ts)_
+_See code: [src/commands/delete.ts](https://github.com/sdelements/flan/blob/v0.1.0-alpha.0/src/commands/delete.ts)_
 
-## `tart fetch FILE`
+## `flan fetch FILE`
 
 fetch specified dump file from a remote repository
 
 ```
 USAGE
-  $ tart fetch FILE
+  $ flan fetch FILE
 
 ARGUMENTS
   FILE  name of the file
 
 OPTIONS
-  -c, --config=config  [default: ./tart.config.json] Path to configuration file
+  -c, --config=config  [default: ./flan.config.json] Path to configuration file
 
 EXAMPLE
-  $ tart fetch filename
+  $ flan fetch filename
 ```
 
-_See code: [src/commands/fetch.ts](https://github.com/sdelements/tart/blob/v0.1.0-alpha.0/src/commands/fetch.ts)_
+_See code: [src/commands/fetch.ts](https://github.com/sdelements/flan/blob/v0.1.0-alpha.0/src/commands/fetch.ts)_
 
-## `tart help [COMMAND]`
+## `flan help [COMMAND]`
 
-display help for tart
+display help for flan
 
 ```
 USAGE
-  $ tart help [COMMAND]
+  $ flan help [COMMAND]
 
 ARGUMENTS
   COMMAND  command to show help for
@@ -154,125 +154,125 @@ OPTIONS
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.2/src/commands/help.ts)_
 
-## `tart init`
+## `flan init`
 
-Initializes tart for this project
+Initializes flan for this project
 
 ```
 USAGE
-  $ tart init
+  $ flan init
 
 OPTIONS
-  -c, --config=config  [default: ./tart.config.json] Path to configuration file
+  -c, --config=config  [default: ./flan.config.json] Path to configuration file
 
 EXAMPLES
-  $ tart init
-  Config file found at home/tart.config.js
+  $ flan init
+  Config file found at home/flan.config.js
 
-  $ tart init
+  $ flan init
   A config file will be created, continue? [y/n]
 
-  $ tart init -c /some-folder/tart.config.json
-  Config file found at home/tart/some-folder/tart.config.json
+  $ flan init -c /some-folder/flan.config.json
+  Config file found at home/flan/some-folder/flan.config.json
 ```
 
-_See code: [src/commands/init.ts](https://github.com/sdelements/tart/blob/v0.1.0-alpha.0/src/commands/init.ts)_
+_See code: [src/commands/init.ts](https://github.com/sdelements/flan/blob/v0.1.0-alpha.0/src/commands/init.ts)_
 
-## `tart list`
+## `flan list`
 
 lists available dumps
 
 ```
 USAGE
-  $ tart list
+  $ flan list
 
 OPTIONS
-  -c, --config=config  [default: ./tart.config.json] Path to configuration file
+  -c, --config=config  [default: ./flan.config.json] Path to configuration file
 
 EXAMPLE
-  $ tart list
+  $ flan list
 ```
 
-_See code: [src/commands/list.ts](https://github.com/sdelements/tart/blob/v0.1.0-alpha.0/src/commands/list.ts)_
+_See code: [src/commands/list.ts](https://github.com/sdelements/flan/blob/v0.1.0-alpha.0/src/commands/list.ts)_
 
-## `tart load INPUT`
+## `flan load INPUT`
 
 load database from dump
 
 ```
 USAGE
-  $ tart load INPUT
+  $ flan load INPUT
 
 ARGUMENTS
   INPUT  name of input file
 
 OPTIONS
-  -c, --config=config  [default: ./tart.config.json] Path to configuration file
+  -c, --config=config  [default: ./flan.config.json] Path to configuration file
 
 EXAMPLE
-  $ tart load myDB
+  $ flan load myDB
 ```
 
-_See code: [src/commands/load.ts](https://github.com/sdelements/tart/blob/v0.1.0-alpha.0/src/commands/load.ts)_
+_See code: [src/commands/load.ts](https://github.com/sdelements/flan/blob/v0.1.0-alpha.0/src/commands/load.ts)_
 
-## `tart publish FILE`
+## `flan publish FILE`
 
 publish specified dump file to a remote repository
 
 ```
 USAGE
-  $ tart publish FILE
+  $ flan publish FILE
 
 ARGUMENTS
   FILE  name of the file
 
 OPTIONS
-  -c, --config=config  [default: ./tart.config.json] Path to configuration file
+  -c, --config=config  [default: ./flan.config.json] Path to configuration file
 
 EXAMPLE
-  $ tart publish filename
+  $ flan publish filename
 ```
 
-_See code: [src/commands/publish.ts](https://github.com/sdelements/tart/blob/v0.1.0-alpha.0/src/commands/publish.ts)_
+_See code: [src/commands/publish.ts](https://github.com/sdelements/flan/blob/v0.1.0-alpha.0/src/commands/publish.ts)_
 
-## `tart save OUTPUT`
+## `flan save OUTPUT`
 
 save current database to dump
 
 ```
 USAGE
-  $ tart save OUTPUT
+  $ flan save OUTPUT
 
 ARGUMENTS
   OUTPUT  name of output file
 
 OPTIONS
-  -c, --config=config  [default: ./tart.config.json] Path to configuration file
+  -c, --config=config  [default: ./flan.config.json] Path to configuration file
 
 EXAMPLE
-  $ tart save myDB
+  $ flan save myDB
 ```
 
-_See code: [src/commands/save.ts](https://github.com/sdelements/tart/blob/v0.1.0-alpha.0/src/commands/save.ts)_
+_See code: [src/commands/save.ts](https://github.com/sdelements/flan/blob/v0.1.0-alpha.0/src/commands/save.ts)_
 
-## `tart unpublish FILE`
+## `flan unpublish FILE`
 
 unpublish specified database dump from a remote repository
 
 ```
 USAGE
-  $ tart unpublish FILE
+  $ flan unpublish FILE
 
 ARGUMENTS
   FILE  name of the file
 
 OPTIONS
-  -c, --config=config  [default: ./tart.config.json] Path to configuration file
+  -c, --config=config  [default: ./flan.config.json] Path to configuration file
 
 EXAMPLE
-  $ tart unpublish myDB@1.0.0
+  $ flan unpublish myDB@1.0.0
 ```
 
-_See code: [src/commands/unpublish.ts](https://github.com/sdelements/tart/blob/v0.1.0-alpha.0/src/commands/unpublish.ts)_
+_See code: [src/commands/unpublish.ts](https://github.com/sdelements/flan/blob/v0.1.0-alpha.0/src/commands/unpublish.ts)_
 
 <!-- commandsstop -->

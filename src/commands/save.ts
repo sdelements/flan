@@ -4,16 +4,16 @@ import execa from "execa";
 import fs from "fs-extra";
 import os from "os";
 
-import TartCommand from "../TartCommand";
+import FlanCommand from "../FlanCommand";
 import { createExecaCommand, checkDumpNameForTag } from "../utils";
 
-export default class Save extends TartCommand {
+export default class Save extends FlanCommand {
   static description = "save current database to dump";
 
-  static examples = ["$ tart save myDB"];
+  static examples = ["$ flan save myDB"];
 
   static flags = {
-    ...TartCommand.flags,
+    ...FlanCommand.flags,
   };
 
   static args = [

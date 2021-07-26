@@ -2,19 +2,19 @@ import cli from "cli-ux";
 import chalk from "chalk";
 import execa from "execa";
 
-import TartCommand from "../TartCommand";
+import FlanCommand from "../FlanCommand";
 
 const tableFlags = cli.table.flags();
 
 type GitTag = { tag: string; sha: string; status?: string };
 
-export default class Available extends TartCommand {
+export default class Available extends FlanCommand {
   static description = "lists available dumps";
 
-  static examples = [`$ tart available`];
+  static examples = [`$ flan available`];
 
   static flags = {
-    ...TartCommand.flags,
+    ...FlanCommand.flags,
     ...tableFlags,
     sort: { ...tableFlags.sort, default: "tag" },
   };

@@ -1,19 +1,19 @@
 import cli from "cli-ux";
 
-import TartCommand from "../TartCommand";
+import FlanCommand from "../FlanCommand";
 import {
   createExecaCommand,
   parseFlagFromGitOutput,
   GIT_FLAGS,
 } from "../utils";
 
-export default class Fetch extends TartCommand {
+export default class Fetch extends FlanCommand {
   static description = "fetch specified dump file from a remote repository";
 
-  static examples = [`$ tart fetch filename`];
+  static examples = [`$ flan fetch filename`];
 
   static flags = {
-    ...TartCommand.flags,
+    ...FlanCommand.flags,
   };
 
   static args = [

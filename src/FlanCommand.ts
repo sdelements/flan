@@ -4,7 +4,7 @@ import { OutputFlags } from "@oclif/parser";
 import * as path from "path";
 import * as fs from "fs-extra";
 
-export default abstract class TartCommand extends Command {
+export default abstract class FlanCommand extends Command {
   localConfig: {
     database: { host: string; db: string; user?: string; password?: string };
     baseDir: string;
@@ -17,21 +17,21 @@ export default abstract class TartCommand extends Command {
     config: flags.string({
       char: "c",
       description: "Path to configuration file",
-      env: "TART_CONFIG",
-      default: "./tart.config.json",
+      env: "FLAN_CONFIG",
+      default: "./flan.config.json",
     }),
   };
 
   // https://github.com/oclif/oclif/issues/225
-  protected parsedFlags?: OutputFlags<typeof TartCommand.flags>;
+  protected parsedFlags?: OutputFlags<typeof FlanCommand.flags>;
 
   constructor(argv: string[], config: IConfig) {
     super(argv, config);
 
     this.localConfig = {
-      baseDir: ".tart",
-      saveDir: ".tart/local",
-      repoDir: ".tart/repo",
+      baseDir: ".flan",
+      saveDir: ".flan/local",
+      repoDir: ".flan/repo",
       database: {
         host: "localhost",
         db: "",
@@ -93,7 +93,7 @@ export default abstract class TartCommand extends Command {
   }
 
   async runHook(name: string) {
-    const hooksFileName = path.resolve(process.cwd(), "./tart.hooks.js");
+    const hooksFileName = path.resolve(process.cwd(), "./flan.hooks.js");
     const hooksExists = await fs.pathExists(hooksFileName);
 
     if (hooksExists) {
