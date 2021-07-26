@@ -40,7 +40,7 @@ USAGE
 
 Under the hood flan is a convenient wrapper for `pgdump` and `pgrestore`. It uses parallel jobs by default to ensure dumping/restoring your database is quick.
 
-Sharing database dumps is achieved by leveraging `git`. Essentially you push a tag to a repository of your choosing (defined in `flan.config.js`) and others can then pull it with `tart fetch`. We chose to use git because it fits well with our internal tooling and process but we understand it may not be the best solution for you. Pull requests are welcome if you're interested in leveraging S3/Azure/etc 🙂
+Sharing database dumps is achieved by leveraging `git`. Essentially you push a tag to a repository of your choosing (defined in `flan.config.js`) and others can then pull it with `tart fetch`. We chose to use git because it fits well with our internal tooling and process but we understand it may not be the best solution for you. Pull requests are welcome if you're interested in using S3/Azure/etc as a store 🙂
 
 > :warning: **WARNING**: Please don't use flan in situations where you can't afford data loss.
 
