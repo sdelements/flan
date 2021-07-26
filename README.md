@@ -1,18 +1,17 @@
-# flan
+<p align="center">
+  <img width="360" height="166" src="https://user-images.githubusercontent.com/1066160/126935125-b1f14451-4bdd-4dad-a283-9b20c4f668d3.png" alt="flan">
+</p>
 
-A tool to load, save and publish db snapshots
+<p align="center">
+  <b >A tasty tool that lets you save, load and share postgres snapshots with ease.</b>
+</p>
 
-[![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
-[![Version](https://img.shields.io/npm/v/@sdelements/flan.svg)](https://npmjs.org/package/@sdelements/flan)
-[![Downloads/week](https://img.shields.io/npm/dw/@sdelements/flan.svg)](https://npmjs.org/package/@sdelements/flan)
-[![License](https://img.shields.io/npm/l/@sdelements/flan.svg)](https://github.com/sdelements/flan/blob/master/package.json)
-
-<!-- toc -->
-
-- [flan](#flan)
-- [Usage](#usage)
-- [Commands](#commands)
-<!-- tocstop -->
+<p align="center">
+  <a href="https://oclif.io"><img src="https://img.shields.io/badge/cli-oclif-brightgreen.svg" alt="oclif"></a>
+  <a href="https://npmjs.org/package/@sdelements/flan"><img src="https://img.shields.io/npm/v/@sdelements/flan.svg" alt="Version"></a>
+  <a href="https://npmjs.org/package/@sdelements/flan"><img src="https://img.shields.io/npm/dw/@sdelements/flan.svg" alt="Downloads/week"></a>
+  <a href="https://github.com/sdelements/flan/blob/master/package.json"><img src="https://img.shields.io/npm/l/@sdelements/flan.svg" alt="License"></a>
+</p>
 
 # Usage
 
@@ -276,3 +275,7 @@ EXAMPLE
 _See code: [src/commands/unpublish.ts](https://github.com/sdelements/flan/blob/v0.1.0-alpha.0/src/commands/unpublish.ts)_
 
 <!-- commandsstop -->
+
+<p align="center">
+  From Toronto with love ❤️
+</p>
