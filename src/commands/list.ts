@@ -1,14 +1,14 @@
 import fs from "fs-extra";
 import path from "path";
-import TartCommand from "../TartCommand";
+import FlanCommand from "../FlanCommand";
 
-export default class List extends TartCommand {
+export default class List extends FlanCommand {
   static description = "lists available dumps";
 
-  static examples = [`$ tart list`];
+  static examples = [`$ flan list`];
 
   static flags = {
-    ...TartCommand.flags,
+    ...FlanCommand.flags,
   };
 
   async run() {

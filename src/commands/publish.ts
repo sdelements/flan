@@ -1,19 +1,19 @@
 import cli from "cli-ux";
 
-import TartCommand from "../TartCommand";
+import FlanCommand from "../FlanCommand";
 import {
   createExecaCommand,
   parseFlagFromGitOutput,
   GIT_FLAGS,
 } from "../utils";
 
-export default class Publish extends TartCommand {
+export default class Publish extends FlanCommand {
   static description = "publish specified dump file to a remote repository";
 
-  static examples = [`$ tart publish filename`];
+  static examples = [`$ flan publish filename`];
 
   static flags = {
-    ...TartCommand.flags,
+    ...FlanCommand.flags,
   };
 
   static args = [
@@ -42,7 +42,7 @@ export default class Publish extends TartCommand {
       await git(["rev-parse", `${file}^{tag}`]);
     } catch (error) {
       this.error(
-        `${file} is not a valid file in the repo. Try:\n   tart save ${file}@\n   tart publish ${file}@`
+        `${file} is not a valid file in the repo. Try:\n   flan save ${file}@\n   flan publish ${file}@`
       );
     }
 

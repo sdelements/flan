@@ -2,16 +2,16 @@ import path from "path";
 import fs from "fs-extra";
 import cli from "cli-ux";
 
-import TartCommand from "../TartCommand";
+import FlanCommand from "../FlanCommand";
 import { createExecaCommand, checkDumpNameForTag } from "../utils";
 
-export default class Load extends TartCommand {
+export default class Load extends FlanCommand {
   static description = "delete a local database dump";
 
-  static examples = ["$ tart delete myDB", "$ tart delete myDB@1.0.0"];
+  static examples = ["$ flan delete myDB", "$ flan delete myDB@1.0.0"];
 
   static flags = {
-    ...TartCommand.flags,
+    ...FlanCommand.flags,
   };
 
   static args = [

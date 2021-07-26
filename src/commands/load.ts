@@ -3,16 +3,16 @@ import path from "path";
 import execa from "execa";
 import os from "os";
 
-import TartCommand from "../TartCommand";
+import FlanCommand from "../FlanCommand";
 import { checkDumpNameForTag } from "../utils";
 
-export default class Load extends TartCommand {
+export default class Load extends FlanCommand {
   static description = "load database from dump";
 
-  static examples = ["$ tart load myDB"];
+  static examples = ["$ flan load myDB"];
 
   static flags = {
-    ...TartCommand.flags,
+    ...FlanCommand.flags,
   };
 
   static args = [

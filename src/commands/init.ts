@@ -3,24 +3,24 @@ import path from "path";
 import execa from "execa";
 import cli from "cli-ux";
 
-import TartCommand from "../TartCommand";
+import FlanCommand from "../FlanCommand";
 
-export default class Init extends TartCommand {
-  static description = "Initializes tart for this project";
+export default class Init extends FlanCommand {
+  static description = "Initializes flan for this project";
 
   static flags = {
-    ...TartCommand.flags,
+    ...FlanCommand.flags,
   };
 
   static examples = [
-    `$ tart init
-Config file found at home/tart.config.js
+    `$ flan init
+Config file found at home/flan.config.js
 `,
-    `$ tart init
+    `$ flan init
 A config file will be created, continue? [y/n]
 `,
-    `$ tart init -c /some-folder/tart.config.json
-Config file found at home/tart/some-folder/tart.config.json
+    `$ flan init -c /some-folder/flan.config.json
+Config file found at home/flan/some-folder/flan.config.json
 `,
   ];
 
