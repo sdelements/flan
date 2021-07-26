@@ -295,3 +295,11 @@ _See code: [src/commands/unpublish.ts](https://github.com/sdelements/flan/blob/v
 <p align="center">
   From Toronto with love ❤️
 </p>
+
+<p align="center">
+  👩‍🍳 :pie: 👨‍🍳 :pie: 👩‍🍳 :pie: 👨‍🍳 :pie: 👨‍🍳
+  <br />
+  <sub>Built by Team Pie</sub>
+  <br />
+  <sub>Special thanks to <a href="https://github.com/revangel">@revangel</a> for the logo</sub>
+</p>
