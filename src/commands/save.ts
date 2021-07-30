@@ -92,14 +92,12 @@ export default class Save extends FlanCommand {
     }
 
     const pgArgs = [
-      `--dbname=${this.localConfig.database.db as string}`,
       `--jobs=${Math.floor(os.cpus().length / 2)}`,
       "--compress=9",
       "--format=directory",
       "--clean",
       "--no-owner",
-      "-U",
-      this.localConfig.database.user as string,
+      ...this.getPgConnectionArgs(),
       `--file=${dir}`,
     ];
 

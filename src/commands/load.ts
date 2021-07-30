@@ -64,9 +64,7 @@ export default class Load extends FlanCommand {
         "--clean",
         `--jobs=${Math.floor(os.cpus().length / 2)}`,
         "--schema=public",
-        "-U",
-        this.localConfig.database.user as string,
-        `--dbname=${this.localConfig.database.db as string}`,
+        ...this.getPgConnectionArgs(),
         path.resolve(loadPath, input),
       ]);
     } catch (error) {

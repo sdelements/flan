@@ -47,6 +47,24 @@ export default abstract class FlanCommand extends Command {
     await this.loadConfigFile(flags.config as unknown as string);
   }
 
+  getPgConnectionArgs(): string[] {
+    // don't pass pg password on cli. expect environment variable
+    // throw here if not found as opposed to init so we can still
+    // run commands that don't require PG without the env var
+    if (!process.env.PGPASSWORD) {
+      throw new Error(
+        "PGPASSWORD environment variable must be set to connect to postgres"
+      );
+    }
+
+    return [
+      `--host=${this.localConfig.database.host}`,
+      `--dbname=${this.localConfig.database.db}`,
+      "-U",
+      this.localConfig.database.user as string,
+    ];
+  }
+
   async loadConfigFile(configPath: string) {
     let configJSON;
 
