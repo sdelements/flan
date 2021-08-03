@@ -52,11 +52,6 @@ Config file found at home/flan/some-folder/flan.config.json
           { required: false }
         );
 
-        const password = await cli.prompt(
-          "(Optional) Please enter your database password",
-          { required: false, type: "hide" }
-        );
-
         const repository = await cli.prompt(
           "(Optional) Please enter your repository url",
           { required: false }
@@ -74,7 +69,6 @@ Config file found at home/flan/some-folder/flan.config.json
             baseDir: this.localConfig.baseDir,
             database: {
               host,
-              password,
               db,
               user,
             },
