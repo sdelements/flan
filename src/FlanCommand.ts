@@ -6,7 +6,7 @@ import * as fs from "fs-extra";
 
 export default abstract class FlanCommand extends Command {
   localConfig: {
-    database: { host: string; db: string; user?: string; password?: string };
+    database: { host: string; db: string; user?: string };
     baseDir: string;
     saveDir: string;
     repoDir: string;
@@ -45,6 +45,15 @@ export default abstract class FlanCommand extends Command {
     const { flags } = this.parse(this.ctor);
 
     await this.loadConfigFile(flags.config as unknown as string);
+  }
+
+  getPgConnectionArgs(): string[] {
+    return [
+      `--host=${this.localConfig.database.host}`,
+      `--dbname=${this.localConfig.database.db}`,
+      "-U",
+      this.localConfig.database.user as string,
+    ];
   }
 
   async loadConfigFile(configPath: string) {
