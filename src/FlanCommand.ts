@@ -3,6 +3,7 @@ import { IConfig } from "@oclif/config";
 import { OutputFlags } from "@oclif/parser";
 import * as path from "path";
 import * as fs from "fs-extra";
+import process from "process";
 
 export default abstract class FlanCommand extends Command {
   localConfig: {
@@ -57,8 +58,27 @@ export default abstract class FlanCommand extends Command {
   }
 
   async loadConfigFile(configPath: string) {
-    let configJSON;
+    // get envirment variable configurations
+    let envConfig: { baseDir?: string; repository?: string } = {};
+    let envDbConfig: { host?: string; db?: string; user?: string } = {};
+    if (process.env.FLAN_DB_HOST) {
+      envDbConfig = { ...envDbConfig, host: process.env.FLAN_DB_HOST };
+    }
+    if (process.env.FLAN_DB_NAME) {
+      envDbConfig = { ...envDbConfig, db: process.env.FLAN_DB_NAME };
+    }
+    if (process.env.FLAN_DB_USER) {
+      envDbConfig = { ...envDbConfig, user: process.env.FLAN_DB_USER };
+    }
+    if (process.env.FLAN_BASE_DIR) {
+      envConfig = { ...envConfig, baseDir: process.env.FLAN_BASE_DIR };
+    }
+    if (process.env.FLAN_REPOSITORY) {
+      envConfig = { ...envConfig, repository: process.env.FLAN_REPOSITORY };
+    }
 
+    // load config file
+    let configJSON;
     try {
       configJSON = await fs.readJson(configPath);
     } catch (error) {
@@ -68,19 +88,23 @@ export default abstract class FlanCommand extends Command {
     this.localConfig = {
       ...this.localConfig,
       ...configJSON,
-      baseDir: path.resolve(configJSON.baseDir || this.localConfig.baseDir),
+      ...envConfig,
+      baseDir: path.resolve(
+        envConfig.baseDir || configJSON.baseDir || this.localConfig.baseDir
+      ),
       // set full paths
       repoDir: path.resolve(
-        configJSON.baseDir || this.localConfig.baseDir,
+        envConfig.baseDir || configJSON.baseDir || this.localConfig.baseDir,
         "./repo"
       ),
       saveDir: path.resolve(
-        configJSON.baseDir || this.localConfig.baseDir,
+        envConfig.baseDir || configJSON.baseDir || this.localConfig.baseDir,
         "./local"
       ),
       database: {
         ...this.localConfig.database,
         ...configJSON.database,
+        ...envDbConfig,
       },
     };
 
