@@ -3,7 +3,6 @@ import { IConfig } from "@oclif/config";
 import { OutputFlags } from "@oclif/parser";
 import * as path from "path";
 import * as fs from "fs-extra";
-import process from "process";
 
 export default abstract class FlanCommand extends Command {
   localConfig: {
@@ -58,38 +57,7 @@ export default abstract class FlanCommand extends Command {
   }
 
   async loadConfigFile(configPath: string) {
-    // get envirment variable configurations
-    let envConfig: {
-      baseDir?: string;
-      saveDir?: string;
-      repoDir?: string;
-      repository?: string;
-    } = {};
-    let envDbConfig: { host?: string; db?: string; user?: string } = {};
-
-    if (process.env.FLAN_DB_HOST) {
-      envDbConfig = { ...envDbConfig, host: process.env.FLAN_DB_HOST };
-    }
-    if (process.env.FLAN_DB_NAME) {
-      envDbConfig = { ...envDbConfig, db: process.env.FLAN_DB_NAME };
-    }
-    if (process.env.FLAN_DB_USER) {
-      envDbConfig = { ...envDbConfig, user: process.env.FLAN_DB_USER };
-    }
-    if (process.env.FLAN_BASE_DIR) {
-      envConfig = { ...envConfig, baseDir: process.env.FLAN_BASE_DIR };
-    }
-    if (process.env.FLAN_SAVE_DIR) {
-      envConfig = { ...envConfig, saveDir: process.env.FLAN_SAVE_DIR };
-    }
-    if (process.env.FLAN_REPO_DIR) {
-      envConfig = { ...envConfig, repoDir: process.env.FLAN_REPO_DIR };
-    }
-    if (process.env.FLAN_REPOSITORY) {
-      envConfig = { ...envConfig, repository: process.env.FLAN_REPOSITORY };
-    }
-
-    // load config file
+    // load config file if it exsits
     let configJSON: {
       database?: { host?: string; db?: string; user?: string };
       baseDir?: string;
@@ -97,6 +65,7 @@ export default abstract class FlanCommand extends Command {
       repoDir?: string;
       repository?: string;
     } = {};
+
     try {
       configJSON = await fs.readJson(configPath);
     } catch (error) {
@@ -106,37 +75,54 @@ export default abstract class FlanCommand extends Command {
     }
 
     this.localConfig = {
-      ...this.localConfig,
-      ...configJSON,
-      ...envConfig,
       baseDir: path.resolve(
-        envConfig.baseDir || configJSON.baseDir || this.localConfig.baseDir
+        process.env.FLAN_BASE_DIR ||
+          configJSON.baseDir ||
+          this.localConfig.baseDir
       ),
       // set full paths
       repoDir: path.resolve(
-        envConfig.baseDir || configJSON.baseDir || this.localConfig.baseDir,
+        process.env.FLAN_BASE_DIR ||
+          configJSON.baseDir ||
+          this.localConfig.baseDir,
         "./repo"
       ),
       saveDir: path.resolve(
-        envConfig.baseDir || configJSON.baseDir || this.localConfig.baseDir,
+        process.env.FLAN_BASE_DIR ||
+          configJSON.baseDir ||
+          this.localConfig.baseDir,
         "./local"
       ),
       database: {
-        ...this.localConfig.database,
-        ...configJSON.database,
-        ...envDbConfig,
+        host:
+          process.env.FLAN_DB_HOST ||
+          configJSON.database?.host ||
+          this.localConfig.database.host,
+        db:
+          process.env.FLAN_DB_NAME ||
+          configJSON.database?.host ||
+          this.localConfig.database.db,
+        user:
+          process.env.FLAN_DB_USER ||
+          configJSON.database?.user ||
+          this.localConfig.database.user,
       },
     };
 
-    if (envConfig.repoDir || configJSON.repoDir) {
+    if (process.env.FLAN_REPOSITORY || configJSON.repository) {
+      this.localConfig.repository =
+        process.env.FLAN_REPOSITORY || configJSON.repository;
+    }
+
+    if (process.env.FLAN_REPO_DIR || configJSON.repoDir) {
       this.localConfig.repoDir = path.resolve(
-        envConfig.repoDir || configJSON.repoDir || ""
+        process.env.FLAN_REPO_DIR || configJSON.repoDir || ""
       );
     }
 
-    if (envConfig.saveDir || configJSON.saveDir) {
+    if (process.env.FLAN_SAVE_DIR || configJSON.saveDir) {
       this.localConfig.saveDir = path.resolve(
-        envConfig.saveDir || configJSON.saveDir || ""
+        process.env.FLAN_SAVE_DIR || configJSON.saveDir || ""
       );
     }
 

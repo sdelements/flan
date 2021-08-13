@@ -11,7 +11,7 @@ export default class Init extends FlanCommand {
 
   static flags = {
     ...FlanCommand.flags,
-    confirm: flags.boolean({
+    yes: flags.boolean({
       char: "y",
       description: "Auto confirm directory creating questions",
     }),
@@ -100,7 +100,7 @@ Git repository initialized at /home/flan/some-folder/.flan/repo
 
     if (!(await fs.pathExists(baseDir))) {
       if (
-        flags.confirm ||
+        flags.yes ||
         (await cli.confirm(
           `A base directory will be created at ${baseDir}, continue? [y/n]`
         ))
@@ -119,7 +119,7 @@ Git repository initialized at /home/flan/some-folder/.flan/repo
 
     if (!(await fs.pathExists(saveDir))) {
       if (
-        flags.confirm ||
+        flags.yes ||
         (await cli.confirm(
           `A save directory will be created at ${saveDir}, continue? [y/n]`
         ))
@@ -138,7 +138,7 @@ Git repository initialized at /home/flan/some-folder/.flan/repo
 
     if (!(await fs.pathExists(repoDir))) {
       if (
-        flags.confirm ||
+        flags.yes ||
         (await cli.confirm(
           `A git repository will be initialized at ${repoDir}, continue? [y/n]`
         ))
