@@ -59,8 +59,14 @@ export default abstract class FlanCommand extends Command {
 
   async loadConfigFile(configPath: string) {
     // get envirment variable configurations
-    let envConfig: { baseDir?: string; repository?: string } = {};
+    let envConfig: {
+      baseDir?: string;
+      saveDir?: string;
+      repoDir?: string;
+      repository?: string;
+    } = {};
     let envDbConfig: { host?: string; db?: string; user?: string } = {};
+
     if (process.env.FLAN_DB_HOST) {
       envDbConfig = { ...envDbConfig, host: process.env.FLAN_DB_HOST };
     }
@@ -73,16 +79,30 @@ export default abstract class FlanCommand extends Command {
     if (process.env.FLAN_BASE_DIR) {
       envConfig = { ...envConfig, baseDir: process.env.FLAN_BASE_DIR };
     }
+    if (process.env.FLAN_SAVE_DIR) {
+      envConfig = { ...envConfig, saveDir: process.env.FLAN_SAVE_DIR };
+    }
+    if (process.env.FLAN_REPO_DIR) {
+      envConfig = { ...envConfig, repoDir: process.env.FLAN_REPO_DIR };
+    }
     if (process.env.FLAN_REPOSITORY) {
       envConfig = { ...envConfig, repository: process.env.FLAN_REPOSITORY };
     }
 
     // load config file
-    let configJSON;
+    let configJSON: {
+      database?: { host?: string; db?: string; user?: string };
+      baseDir?: string;
+      saveDir?: string;
+      repoDir?: string;
+      repository?: string;
+    } = {};
     try {
       configJSON = await fs.readJson(configPath);
     } catch (error) {
-      this.error("Unable to load configuration");
+      if (!error.code || error.code !== "ENOENT") {
+        this.error("A config file exists but it could not be loaded");
+      }
     }
 
     this.localConfig = {
@@ -108,12 +128,16 @@ export default abstract class FlanCommand extends Command {
       },
     };
 
-    if (configJSON.repoDir) {
-      this.localConfig.repoDir = path.resolve(configJSON.repoDir);
+    if (envConfig.repoDir || configJSON.repoDir) {
+      this.localConfig.repoDir = path.resolve(
+        envConfig.repoDir || configJSON.repoDir || ""
+      );
     }
 
-    if (configJSON.saveDir) {
-      this.localConfig.saveDir = path.resolve(configJSON.saveDir);
+    if (envConfig.saveDir || configJSON.saveDir) {
+      this.localConfig.saveDir = path.resolve(
+        envConfig.saveDir || configJSON.saveDir || ""
+      );
     }
 
     if (!this.localConfig.database.db) {
