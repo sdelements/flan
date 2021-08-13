@@ -115,12 +115,14 @@ export default abstract class FlanCommand extends Command {
     }
 
     if (process.env.FLAN_REPO_DIR || configJSON.repoDir) {
+      // the "" is needed to suppress a TypeScript error, it will not be used
       this.localConfig.repoDir = path.resolve(
         process.env.FLAN_REPO_DIR || configJSON.repoDir || ""
       );
     }
 
     if (process.env.FLAN_SAVE_DIR || configJSON.saveDir) {
+      // the "" is needed to suppress a TypeScript error, it will not be used
       this.localConfig.saveDir = path.resolve(
         process.env.FLAN_SAVE_DIR || configJSON.saveDir || ""
       );
