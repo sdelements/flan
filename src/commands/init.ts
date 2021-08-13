@@ -1,3 +1,4 @@
+import { flags } from "@oclif/command";
 import fs from "fs-extra";
 import path from "path";
 import execa from "execa";
@@ -10,6 +11,10 @@ export default class Init extends FlanCommand {
 
   static flags = {
     ...FlanCommand.flags,
+    yes: flags.boolean({
+      char: "y",
+      description: "Auto confirm directory creating questions",
+    }),
   };
 
   static examples = [
@@ -21,6 +26,12 @@ A config file will be created, continue? [y/n]
 `,
     `$ flan init -c /some-folder/flan.config.json
 Config file found at home/flan/some-folder/flan.config.json
+`,
+    `$ flan init -y -c /some-folder/flan.config.json
+Config file found at /home/flan/some-folder/flan.config.json
+The base directory has been created successfully at /home/flan/some-folder/.flan
+The save directory has been created successfully at /home/flan/some-folder/.flan/local
+Git repository initialized at /home/flan/some-folder/.flan/repo
 `,
   ];
 
@@ -89,9 +100,10 @@ Config file found at home/flan/some-folder/flan.config.json
 
     if (!(await fs.pathExists(baseDir))) {
       if (
-        await cli.confirm(
+        flags.yes ||
+        (await cli.confirm(
           `A base directory will be created at ${baseDir}, continue? [y/n]`
-        )
+        ))
       ) {
         await fs.ensureDir(baseDir);
 
@@ -107,9 +119,10 @@ Config file found at home/flan/some-folder/flan.config.json
 
     if (!(await fs.pathExists(saveDir))) {
       if (
-        await cli.confirm(
+        flags.yes ||
+        (await cli.confirm(
           `A save directory will be created at ${saveDir}, continue? [y/n]`
-        )
+        ))
       ) {
         await fs.ensureDir(saveDir);
 
@@ -125,9 +138,10 @@ Config file found at home/flan/some-folder/flan.config.json
 
     if (!(await fs.pathExists(repoDir))) {
       if (
-        await cli.confirm(
+        flags.yes ||
+        (await cli.confirm(
           `A git repository will be initialized at ${repoDir}, continue? [y/n]`
-        )
+        ))
       ) {
         await fs.ensureDir(repoDir);
         await execa("git", ["init"], {
