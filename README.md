@@ -112,7 +112,7 @@ EXAMPLE
   $ flan available
 ```
 
-_See code: [src/commands/available.ts](https://github.com/sdelements/flan/blob/v0.1.0-alpha.6/src/commands/available.ts)_
+_See code: [src/commands/available.ts](https://github.com/sdelements/flan/blob/v0.1.0-alpha.7/src/commands/available.ts)_
 
 ## `flan delete DELETEFILE`
 
@@ -133,7 +133,7 @@ EXAMPLES
   $ flan delete myDB@1.0.0
 ```
 
-_See code: [src/commands/delete.ts](https://github.com/sdelements/flan/blob/v0.1.0-alpha.6/src/commands/delete.ts)_
+_See code: [src/commands/delete.ts](https://github.com/sdelements/flan/blob/v0.1.0-alpha.7/src/commands/delete.ts)_
 
 ## `flan fetch FILE`
 
@@ -153,7 +153,7 @@ EXAMPLE
   $ flan fetch filename
 ```
 
-_See code: [src/commands/fetch.ts](https://github.com/sdelements/flan/blob/v0.1.0-alpha.6/src/commands/fetch.ts)_
+_See code: [src/commands/fetch.ts](https://github.com/sdelements/flan/blob/v0.1.0-alpha.7/src/commands/fetch.ts)_
 
 ## `flan help [COMMAND]`
 
@@ -201,7 +201,7 @@ EXAMPLES
   Git repository initialized at /home/flan/some-folder/.flan/repo
 ```
 
-_See code: [src/commands/init.ts](https://github.com/sdelements/flan/blob/v0.1.0-alpha.6/src/commands/init.ts)_
+_See code: [src/commands/init.ts](https://github.com/sdelements/flan/blob/v0.1.0-alpha.7/src/commands/init.ts)_
 
 ## `flan list`
 
@@ -218,7 +218,7 @@ EXAMPLE
   $ flan list
 ```
 
-_See code: [src/commands/list.ts](https://github.com/sdelements/flan/blob/v0.1.0-alpha.6/src/commands/list.ts)_
+_See code: [src/commands/list.ts](https://github.com/sdelements/flan/blob/v0.1.0-alpha.7/src/commands/list.ts)_
 
 ## `flan load INPUT`
 
@@ -238,7 +238,7 @@ EXAMPLE
   $ flan load myDB
 ```
 
-_See code: [src/commands/load.ts](https://github.com/sdelements/flan/blob/v0.1.0-alpha.6/src/commands/load.ts)_
+_See code: [src/commands/load.ts](https://github.com/sdelements/flan/blob/v0.1.0-alpha.7/src/commands/load.ts)_
 
 ## `flan publish FILE`
 
@@ -258,7 +258,7 @@ EXAMPLE
   $ flan publish filename
 ```
 
-_See code: [src/commands/publish.ts](https://github.com/sdelements/flan/blob/v0.1.0-alpha.6/src/commands/publish.ts)_
+_See code: [src/commands/publish.ts](https://github.com/sdelements/flan/blob/v0.1.0-alpha.7/src/commands/publish.ts)_
 
 ## `flan save OUTPUT`
 
@@ -278,7 +278,7 @@ EXAMPLE
   $ flan save myDB
 ```
 
-_See code: [src/commands/save.ts](https://github.com/sdelements/flan/blob/v0.1.0-alpha.6/src/commands/save.ts)_
+_See code: [src/commands/save.ts](https://github.com/sdelements/flan/blob/v0.1.0-alpha.7/src/commands/save.ts)_
 
 ## `flan unpublish FILE`
 
@@ -298,7 +298,7 @@ EXAMPLE
   $ flan unpublish myDB@1.0.0
 ```
 
-_See code: [src/commands/unpublish.ts](https://github.com/sdelements/flan/blob/v0.1.0-alpha.6/src/commands/unpublish.ts)_
+_See code: [src/commands/unpublish.ts](https://github.com/sdelements/flan/blob/v0.1.0-alpha.7/src/commands/unpublish.ts)_
 
 <!-- commandsstop -->
 
