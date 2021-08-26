@@ -100,7 +100,7 @@ export default abstract class FlanCommand extends Command {
           this.localConfig.database.host,
         db:
           process.env.FLAN_DB_NAME ||
-          configJSON.database?.host ||
+          configJSON.database?.db ||
           this.localConfig.database.db,
         user:
           process.env.FLAN_DB_USER ||
