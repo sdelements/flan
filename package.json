@@ -1,7 +1,7 @@
 {
   "name": "@sdelements/flan",
   "description": "A tasty tool that lets you save, load and share postgres snapshots with ease.",
-  "version": "0.1.0-alpha.7",
+  "version": "0.1.0-alpha.8",
   "author": "Houssam Haidar",
   "bin": {
     "flan": "./bin/run"
