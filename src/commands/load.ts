@@ -10,11 +10,11 @@ import { checkDumpNameForTag } from "../utils";
 export default class Load extends FlanCommand {
   static description = "load database from dump";
 
-  static examples = ["$ flan load myDB", "$ flan load --dropDB --quiet myDB"];
+  static examples = ["$ flan load myDB", "$ flan load --drop-db --quiet myDB"];
 
   static flags = {
     ...FlanCommand.flags,
-    dropDB: flags.boolean({
+    "drop-db": flags.boolean({
       default: false,
       description: "Drops and re-creates the DB before restoring it's data",
     }),
@@ -58,7 +58,7 @@ export default class Load extends FlanCommand {
       });
     }
 
-    if (flags.dropDB && this.localConfig.database.user) {
+    if (flags["drop-db"] && this.localConfig.database.user) {
       this.log(`recreating ${this.localConfig.database.db}`);
       const dropDbArgs = [
         "postgres",
