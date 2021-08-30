@@ -10,7 +10,7 @@ import { checkDumpNameForTag } from "../utils";
 export default class Load extends FlanCommand {
   static description = "load database from dump";
 
-  static examples = ["$ flan load myDB"];
+  static examples = ["$ flan load myDB", "$ flan load --dropDB --quiet myDB"];
 
   static flags = {
     ...FlanCommand.flags,
