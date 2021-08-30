@@ -95,8 +95,6 @@ export default class Save extends FlanCommand {
       `--jobs=${Math.floor(os.cpus().length / 2)}`,
       "--compress=9",
       "--format=directory",
-      "--clean",
-      "--no-owner",
       ...this.getPgConnectionArgs(),
       `--file=${dir}`,
     ];
