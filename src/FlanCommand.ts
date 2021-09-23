@@ -6,7 +6,7 @@ import * as fs from "fs-extra";
 
 export default abstract class FlanCommand extends Command {
   localConfig: {
-    database: { host: string; db: string; user?: string };
+    database: { host: string; db: string; user?: string; port?: number };
     baseDir: string;
     saveDir: string;
     repoDir: string;
@@ -36,6 +36,7 @@ export default abstract class FlanCommand extends Command {
         host: "",
         db: "",
         user: "",
+        port: 5432
       },
     };
   }
@@ -53,13 +54,14 @@ export default abstract class FlanCommand extends Command {
       `--dbname=${this.localConfig.database.db}`,
       "-U",
       this.localConfig.database.user as string,
+      `--port=${this.localConfig.database.port}`
     ];
   }
 
   async loadConfigFile(configPath: string) {
     // load config file if it exsits
     let configJSON: {
-      database?: { host?: string; db?: string; user?: string };
+      database?: { host?: string; db?: string; user?: string, port?:number };
       baseDir?: string;
       saveDir?: string;
       repoDir?: string;
@@ -109,6 +111,10 @@ export default abstract class FlanCommand extends Command {
           process.env.FLAN_DB_USER ||
           configJSON.database?.user ||
           this.localConfig.database.user,
+        port:
+          process.env.FLAN_DB_PORT ||
+          configJSON.database?.port ||
+          this.localConfig.database.port,
       },
     };
 
