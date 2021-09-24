@@ -62,6 +62,7 @@ Git repository initialized at /home/flan/some-folder/.flan/repo
           "(Optional) Please enter your database port",
           {
             required: false,
+            default: "5432",
           }
         );
 
