@@ -87,12 +87,7 @@ export default class Load extends FlanCommand {
         path.resolve(loadPath, input),
       ]);
     } catch (error) {
-      if (
-        flags.quiet &&
-        !/pg_restore: warning: errors ignored on restore: \d+\s*$/gim.test(
-          error.stderr
-        )
-      ) {
+      if (!flags.quiet) {
         this.error(error.stderr || error.message);
       }
     }

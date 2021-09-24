@@ -33,7 +33,7 @@ export default abstract class FlanCommand extends Command {
       saveDir: ".flan/local",
       repoDir: ".flan/repo",
       database: {
-        host: "localhost",
+        host: "",
         db: "",
         user: "",
       },
@@ -95,14 +95,17 @@ export default abstract class FlanCommand extends Command {
       ),
       database: {
         host:
+          process.env.PGHOST ||
           process.env.FLAN_DB_HOST ||
           configJSON.database?.host ||
           this.localConfig.database.host,
         db:
+          process.env.PGDATABASE ||
           process.env.FLAN_DB_NAME ||
           configJSON.database?.db ||
           this.localConfig.database.db,
         user:
+          process.env.PGUSER ||
           process.env.FLAN_DB_USER ||
           configJSON.database?.user ||
           this.localConfig.database.user,
