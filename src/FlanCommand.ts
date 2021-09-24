@@ -33,10 +33,10 @@ export default abstract class FlanCommand extends Command {
       saveDir: ".flan/local",
       repoDir: ".flan/repo",
       database: {
-        host: "",
+        host: "localhost",
         db: "",
         user: "",
-        port: "",
+        port: "5432",
       },
     };
   }
