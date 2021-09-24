@@ -6,7 +6,7 @@ import * as fs from "fs-extra";
 
 export default abstract class FlanCommand extends Command {
   localConfig: {
-    database: { host: string; db: string; user?: string; port?: number };
+    database: { host: string; db: string; user?: string; port?: string };
     baseDir: string;
     saveDir: string;
     repoDir: string;
@@ -36,7 +36,7 @@ export default abstract class FlanCommand extends Command {
         host: "",
         db: "",
         user: "",
-        port: 5432
+        port: "",
       },
     };
   }
@@ -54,14 +54,14 @@ export default abstract class FlanCommand extends Command {
       `--dbname=${this.localConfig.database.db}`,
       "-U",
       this.localConfig.database.user as string,
-      `--port=${this.localConfig.database.port}`
+      `--port=${this.localConfig.database.port}`,
     ];
   }
 
   async loadConfigFile(configPath: string) {
     // load config file if it exsits
     let configJSON: {
-      database?: { host?: string; db?: string; user?: string, port?:number };
+      database?: { host?: string; db?: string; user?: string; port?: string };
       baseDir?: string;
       saveDir?: string;
       repoDir?: string;
@@ -98,21 +98,18 @@ export default abstract class FlanCommand extends Command {
       database: {
         host:
           process.env.PGHOST ||
-          process.env.FLAN_DB_HOST ||
           configJSON.database?.host ||
           this.localConfig.database.host,
         db:
           process.env.PGDATABASE ||
-          process.env.FLAN_DB_NAME ||
           configJSON.database?.db ||
           this.localConfig.database.db,
         user:
           process.env.PGUSER ||
-          process.env.FLAN_DB_USER ||
           configJSON.database?.user ||
           this.localConfig.database.user,
         port:
-          process.env.FLAN_DB_PORT ||
+          process.env.PGPORT ||
           configJSON.database?.port ||
           this.localConfig.database.port,
       },
