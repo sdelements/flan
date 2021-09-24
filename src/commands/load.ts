@@ -88,7 +88,7 @@ export default class Load extends FlanCommand {
       ]);
     } catch (error) {
       if (
-        flags.quiet &&
+        !flags.quiet &&
         !/pg_restore: warning: errors ignored on restore: \d+\s*$/gim.test(
           error.stderr
         )

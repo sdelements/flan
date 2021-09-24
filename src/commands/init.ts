@@ -58,6 +58,14 @@ Git repository initialized at /home/flan/some-folder/.flan/repo
           }
         );
 
+        const port = await cli.prompt(
+          "(Optional) Please enter your database port",
+          {
+            required: false,
+            default: "5432",
+          }
+        );
+
         const user = await cli.prompt(
           "(Optional) Please enter your database username",
           { required: false }
@@ -80,6 +88,7 @@ Git repository initialized at /home/flan/some-folder/.flan/repo
             baseDir: this.localConfig.baseDir,
             database: {
               host,
+              port,
               db,
               user,
             },
