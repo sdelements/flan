@@ -5,7 +5,7 @@ export const createExecaCommand =
     execa(command, params, config);
 
 export const checkDumpNameForTag = (name: string) => {
-  return /^[a-z_-]+@(\d+.)?.?(\d+.)?.?(\d+)$/i.test(name);
+  return /^[a-z_-]+@(\d+.)?.?(\d+.)?.?(\d+)(\+\d+)?$/i.test(name);
 };
 
 export const parseFlagFromGitOutput = (str?: string) => {
