@@ -96,7 +96,8 @@ export default class Available extends FlanCommand {
     const { stdout } = await execa("git", ["ls-remote", "--tags", repository], {
       cwd: this.localConfig.repoDir,
     });
-    const tagRegex = /(?<sha>[a-z0-9]+)\srefs\/tags\/(?<tag>[\w\.\-@]+)$/gim;
+    // Supports tag formats such as 2025.3.2 and 2026.3.2+1
+    const tagRegex = /(?<sha>[a-z0-9]+)\srefs\/tags\/(?<tag>[\w\.\+\-@]+)$/gim;
 
     let match;
     const tags = [];
