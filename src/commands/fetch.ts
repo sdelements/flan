@@ -38,8 +38,10 @@ export default class Fetch extends FlanCommand {
     this.log(`file: ${file} || repo: ${repository}`);
 
     const { stdout } = await git(["ls-remote", "--tags", repository || ""]);
-    const remoteTagsRegex = new RegExp(`refs/tags/${file}$`, "m");
-    if (!remoteTagsRegex.test(stdout)) {
+    const exists = stdout
+      .split("\n")
+      .some((line) => line.endsWith(`\trefs/tags/${file}`));
+    if (!exists) {
       this.error(`${file} does not exist in the remote repository`);
     }
 
